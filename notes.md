@@ -1,7 +1,5 @@
 # CS 260 Notes
 
-# Testing for pull/push
-
 [My startup - Simon](https://simon.cs260.click)
 
 ## Helpful links
