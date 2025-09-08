@@ -7,7 +7,7 @@
 - [MDN](https://developer.mozilla.org)
 
 ## GitHub:
-Main commands (terminal):
+Updating GitHub with changes made locally (using the terminal):
 
 - `git add <filename>` - uploads the file to GitHub repo
 - `git commit -am "<notes>"` - commits the changes
