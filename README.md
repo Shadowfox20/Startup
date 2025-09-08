@@ -26,7 +26,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Video games are massive investments, both in money and in time. On top of that, everyone has very specific tastes and preferences, and every game is appealing to a different group of people. Because of this, basic review sites don't quite cover the level of complexity that is required for video game criticosm. I want to develop a site that allows users to upload detailed reviews and generate a discussion about the games they play. Think letterboxd for games.
 
 ### Design
 
