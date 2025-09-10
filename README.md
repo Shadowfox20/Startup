@@ -43,9 +43,9 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Creating an account
+- Posting a review
+- Viewing other profiles
 
 ### Technologies
 
