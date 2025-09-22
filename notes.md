@@ -14,7 +14,7 @@ Updating GitHub with changes made locally (using the terminal):
 - `git push` - pushes the commit to the branch
 - `git fetch` - checks for updates to GitHub repo
 - `git status` - describes updates found
-- `get pull` - updates local repo with GitHub changes
+- `git pull` - updates local repo with GitHub changes
 
 ## AWS:
 ### To create an IP address:
@@ -24,3 +24,6 @@ Updating GitHub with changes made locally (using the terminal):
 ### DNS - Domain Name Service:
 - Register a domain using the Route 53 dashboard
 - To connect to an IP, go to "create record" within the hosted zone on AWS
+
+## HTML:
+- 
