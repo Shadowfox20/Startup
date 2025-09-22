@@ -5,6 +5,7 @@
 - [Course instruction](https://github.com/webprogramming260)
 - [Canvas](https://byu.instructure.com)
 - [MDN](https://developer.mozilla.org)
+- [W3 HTML tutorials](https://w3schools.com/html)
 
 ## GitHub:
 Updating GitHub with changes made locally (using the terminal):
@@ -26,4 +27,11 @@ Updating GitHub with changes made locally (using the terminal):
 - To connect to an IP, go to "create record" within the hosted zone on AWS
 
 ## HTML:
-- 
+- The basic skeleton of the page
+- Use tags to indicate different page elements
+    - the `<div>` tag allows you to create custom elements
+- Other important tags:
+    - `<a href="...">` - creates a link
+    - `<p>` - paragraph tag
+    - `<ul>` - starts a list
+    - `<li>` - a list item
