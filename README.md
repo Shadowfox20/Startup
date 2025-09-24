@@ -69,7 +69,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **3rd party API placeholder** - Added placeholder on post.html and profile.html.
 - [x] **Images** - Added a default profile picture.
 - [x] **Login placeholder** - Added a login and create account page.
-- [x] **DB data placeholder** - 
+- [x] **DB data placeholder** - Added placeholder to login.html.
 - [x] **WebSocket placeholder** - Added data placeholder on profile.html and view.html.
 
 ## 🚀 CSS deliverable
