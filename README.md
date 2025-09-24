@@ -62,15 +62,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I created pages for the home, making a post, login, viewing the user's profile, and viewing other posts.
+- [x] **Proper HTML element usage** - Created sections, elements and inputs for each page.
+- [x] **Links** - Each page links to one another via a navigation bar.
+- [x] **Text** - Each page contains text labels, instruction and/or examples of posts.
+- [x] **3rd party API placeholder** - Added placeholder on post.html and profile.html.
+- [x] **Images** - Added a default profile picture.
+- [x] **Login placeholder** - Added a login and create account page.
+- [x] **DB data placeholder** - 
+- [x] **WebSocket placeholder** - Added data placeholder on profile.html and view.html.
 
 ## 🚀 CSS deliverable
 
