@@ -2,7 +2,7 @@
 
 [My Notes](notes.md)
 
-[My Website](https://robertthompson.click)
+[My Website](https://startup.robertthompson.click)
 
 A game reviewing website, focused on giving detailed and honest recommendations of users played Video Games.
 
