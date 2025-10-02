@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    flex: 0 40px;
+    background: hsl(90 87.8% 75.2%);
+    text-align: center;
+    font-size: 18px;
+}
+
+footer {
+    flex: 0 30px;
+    background: hsl(90 55.5% 7%);
+    color: white;
+    flex-direcction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+section:nth-child(2) {
+    flex: 3;
+    background-color: white;
+}
+
+@media (max-width: 550px) {
+    .navTag {
+        display: none;
+    }
+}
+
+@media (max-height: 500px) {
+    footer {
+        display: none;
+    }
+
+    header {
+        flex: 20 px;
+    }
+
+    h1 {
+        display: none;
+    }
+}
