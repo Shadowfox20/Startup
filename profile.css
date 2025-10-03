@@ -24,6 +24,18 @@ section:nth-child(3) {
     flex: 6;
 }
 
+.card-pair {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+}
+
+@media (max-width: 880px) {
+    .card-pair {
+        flex-direction: column;
+    }
+}
+
 @media (max-height: 500px) {
     footer {
         display: none;
