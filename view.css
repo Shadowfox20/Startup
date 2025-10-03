@@ -8,9 +8,21 @@ main {
     margin-right: 20px;
 }
 
-section:nth-child(2) {
-    flex: 3;
+section {
+    flex: 1;
     background-color: white;
+}
+
+.card-pair {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+}
+
+@media (max-width: 880px) {
+    .card-pair {
+        flex-direction: column;
+    }
 }
 
 @media (max-height: 500px) {
