@@ -3,12 +3,23 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
-    margin-left: 20px;
-    margin-right: 20px;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+section {
+    flex: 1;
+    background-color: white;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+section:nth-child(1) {
+    flex: 1;
+    background-color: hsl(180, 10%, 80%);
 }
 
 section:nth-child(2) {
-    flex: 3;
-    background-color: white;
+    flex: 6;
 }
