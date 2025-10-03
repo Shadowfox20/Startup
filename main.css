@@ -13,16 +13,19 @@ header {
 
 footer {
     flex: 0 30px;
-    background: hsl(87, 60%, 3%);
-    color: white;
-    flex-direcction: row;
-    justify-content: center;
-    align-items: center;
+    background: hsl(90, 87.8%, 75.2%);
+    color: black;
     text-align: center;
     margin: 0;
 }
 
-@media (max-width: 550px) {
+a:link,
+a:visited {
+    color: hsl(0, 100%, 23%);
+    text-decoration: none;
+}
+
+@media (max-width: 575px) {
     .navTag {
         display: none;
     }
