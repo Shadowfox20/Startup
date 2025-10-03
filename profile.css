@@ -4,13 +4,24 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: left;
+}
+
+section {
+    flex: 1;
+    background-color: white;
     margin-left: 20px;
     margin-right: 20px;
 }
 
-section:nth-child(2) {
-    flex: 3;
-    background-color: white;
+section:nth-child(1) {
+    flex: 1;
+    background-color: hsl(180, 10%, 80%);
+    margin: 0;
+    text-align: center;
+}
+
+section:nth-child(3) {
+    flex: 6;
 }
 
 @media (max-height: 500px) {
