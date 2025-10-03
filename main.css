@@ -19,24 +19,11 @@ footer {
     justify-content: center;
     align-items: center;
     text-align: center;
+    margin: 0;
 }
 
 @media (max-width: 550px) {
     .navTag {
-        display: none;
-    }
-}
-
-@media (max-height: 500px) {
-    footer {
-        display: none;
-    }
-
-    header {
-        flex: 20 px;
-    }
-
-    h1 {
         display: none;
     }
 }

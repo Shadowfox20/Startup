@@ -12,3 +12,17 @@ section:nth-child(2) {
     flex: 3;
     background-color: white;
 }
+
+@media (max-height: 500px) {
+    footer {
+        display: none;
+    }
+
+    header {
+        flex: 20 px;
+    }
+
+    h1 {
+        display: none;
+    }
+}

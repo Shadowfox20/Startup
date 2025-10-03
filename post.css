@@ -23,3 +23,21 @@ section:nth-child(1) {
 section:nth-child(2) {
     flex: 6;
 }
+
+@media (max-height: 615px) {
+    footer {
+        display: none;
+    }
+
+    header {
+        flex: 0 40 px;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    section:nth-child(1) {
+        display: none;
+    }
+}
