@@ -16,6 +16,7 @@ Updating GitHub with changes made locally (using the terminal):
 - `git fetch` - checks for updates to GitHub repo
 - `git status` - describes updates found
 - `git pull` - updates local repo with GitHub changes
+- `git checkout <branch-name>` - switches active branch
 
 ## AWS:
 ### To create an IP address:
