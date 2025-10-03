@@ -30,8 +30,35 @@ Updating GitHub with changes made locally (using the terminal):
 - The basic skeleton of the page
 - Use tags to indicate different page elements
     - the `<div>` tag allows you to create custom elements
+- Structure tags:
+    - `<head>`
+        - `<title>`
+        - `<link>` - can link a css doc
+    - `<body>`
+        - `<header>`
+            - `<nav>`
+        - `<main>`
+            - `<section>` - creates a different section within the body
+        - `<footer>`
 - Other important tags:
     - `<a href="...">` - creates a link
     - `<p>` - paragraph tag
     - `<ul>` - starts a list
     - `<li>` - a list item
+
+## CSS:
+- Specifies the styling and formatting of different HTML elements
+- Syntax:
+```
+element {
+    spec: value;
+}
+```
+- can use `.class-name` to edit values for a specific clas (as might be specified with a `<div class="...">` tag in the HTML)
+- can use `@media (spec) {}` to specify formatting changes based on window size
+    - `max-width: ___px` or `max-height: ___px`
+    - `orientation: portrait` or `landscape`
+    - `prefers-color-scheme: light` or `dark`
+- `display: flex` allows for the size of each item within the element to be specified
+    - `flex: _` allows you to assign values to indicate how large each item should be
+- `element:nth-child(x)` allows you to make specifications for a specific object, the xth instance of the element
