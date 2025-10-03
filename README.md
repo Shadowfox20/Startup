@@ -47,7 +47,7 @@ I am going to use the required technologies in the following ways.
 
 - **HTML** - Organizing where on the screen posts, profiles, and search features, etc. are
 - **CSS** - Styling the page, making it look good
-- **React** - Show images (game icons, profile pictures)
+- **React** - Show posts (game icons, profile pictures)
 - **Service** - Profile creation
 - **DB/Login** - Storing profiles/login services
 - **WebSocket** - Viewing other profiles
@@ -76,12 +76,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Header, footer, and main content body** - I did not complete this part of the deliverable.
-- [ ] **Navigation elements** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing** - I did not complete this part of the deliverable.
-- [ ] **Application elements** - I did not complete this part of the deliverable.
-- [ ] **Application text content** - I did not complete this part of the deliverable.
-- [ ] **Application images** - I did not complete this part of the deliverable.
+- [x] **Header, footer, and main content body**
+- [x] **Navigation elements** - Links stylized in the header
+- [x] **Responsive to window resizing** - cards containing individual reviews are formatted based on window size, when wide enough, they are viewed two across. The title and footer disappear when the window is too short.
+- [x] **Application elements** - Cards, text boxes and other elements were arranged
+- [x] **Application text content** - Text was formatted to be more readable and clear
+- [x] **Application images** - profile images were made circular
 
 ## 🚀 React part 1: Routing deliverable
 
