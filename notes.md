@@ -63,3 +63,20 @@ element {
 - `display: flex` allows for the size of each item within the element to be specified
     - `flex: _` allows you to assign values to indicate how large each item should be
 - `element:nth-child(x)` allows you to make specifications for a specific object, the xth instance of the element
+
+## React:
+- Imports:
+    - React from "https://esm.sh/react"
+    - ReactDOM from "https://esm.sh/react-dom/client"
+    - Specific functions from "https://esm.sh/react-router-dom"
+- create a function `Page()` which returns the content of the page
+- create a function `App()` which returns:
+    - a `<BrowserRouter>` tag that contains all elements
+    - a `<nav>` element that contains `<NavLink to="/page-name">` elements for each page
+    - a `<main>` element that contains:
+        - a `<Routes>` element (acts like a navbar) which containes `<Route path="/page-name" element={Page} />` elements
+- Ends with
+```
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+```
