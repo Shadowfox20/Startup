@@ -1,9 +1,10 @@
+import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
-import { Login } from './login/login';
-import { Profile } from './profile/profile';
-import { Post } from './post/post';
-import { Home } from './home/home';
-import {View} from './view/view';
+// import { Login } from './login/login';
+// import { Profile } from './profile/profile';
+// import { Post } from './post/post';
+// import { Home } from './home/home';
+// import {View} from './view/view';
 
 export default function App() {
   return (
@@ -35,14 +36,19 @@ export default function App() {
                 </li>
             </menu>
         </nav>
-        <Routes>
+        <main>App components go here</main>
+        {/* <Routes>
             <Route path='/' element={<Home />} exact />
             <Route path='/login' element={<Login />} />
             <Route path='/post' element={<Post />} />
             <Route path='/view' element={<View />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='*' element={<NotFound />} />
-        </Routes>
+        </Routes> */}
     </BrowserRouter>
   );
+}
+
+function NotFound() {
+  return <main className="container-fluid bg-secondary text-center">404: Return to sender. Address unknown.</main>;
 }
