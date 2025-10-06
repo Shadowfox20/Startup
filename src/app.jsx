@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 // import { Login } from './login/login';
 // import { Profile } from './profile/profile';
@@ -45,6 +47,13 @@ export default function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='*' element={<NotFound />} />
         </Routes> */}
+        <footer>
+            <p>
+                Game Shelf by Robert Thompson. Used for CS 260 at BYU.
+                <br />
+                <a href="https://github.com/Shadowfox20/Startup"> GitHub </a>
+            </p>
+        </footer>
     </BrowserRouter>
   );
 }
