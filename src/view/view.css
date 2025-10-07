@@ -4,19 +4,15 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: left;
-    margin-left: 20px;
-    margin-right: 20px;
 }
 
 section {
     flex: 1;
-    background-color: white;
 }
 
 .card-pair {
     display: flex;
     flex-direction: row;
-    column-gap: 20px;
 }
 
 @media (max-width: 880px) {

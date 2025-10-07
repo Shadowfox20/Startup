@@ -11,6 +11,7 @@ import { View } from './view/view';
 export default function App() {
     return (
         <BrowserRouter>
+        <body>
             <header>
                 <h1>Game Shelf</h1>
                     <nav>
@@ -55,6 +56,7 @@ export default function App() {
                     <a href="https://github.com/Shadowfox20/Startup"> GitHub </a>
                 </p>
             </footer>
+        </body>
         </BrowserRouter>
     );
 }

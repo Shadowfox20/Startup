@@ -1,66 +1,60 @@
 body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
 }
 
 header {
-    flex: 0 40px;
-<<<<<<< HEAD
-    background: hsl(90, 51%, 34%);
+    flex: 0 80px;
+    background-color: hsl(90, 51%, 34%);
     text-align: center;
     font-size: 18px;
     color: white;
 }
 
 menu {
-    
+
     justify-content: center;
     gap: 0px;
-    padding: 0;
     margin: 0;
 }
 
 main {
-    flex: 1;
-    background: hsl(205, 11%, 22%);
-    padding: 10px;
+    flex: 1 calc(100vh - 110px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: hsl(205, 11%, 22%);
     color: white;
-=======
-    background: hsl(90 87.8% 75.2%);
-    text-align: center;
-    font-size: 18px;
->>>>>>> 5cc82fc (convert to React)
 }
 
 footer {
     flex: 0 30px;
-<<<<<<< HEAD
-    background: hsl(90, 51%, 34%);
+    background-color: hsl(90, 51%, 34%);
     color: white;
-=======
-    background: hsl(90, 87.8%, 75.2%);
-    color: black;
->>>>>>> 5cc82fc (convert to React)
     text-align: center;
     margin: 0;
 }
 
-img {
-    border-radius: 50%;
-<<<<<<< HEAD
-=======
+section {
+    flex: 1;
+    background-color: hsl(205, 11%, 22%);
+    width: 100%;
+    text-align: center;
+    justify-content: center;
 }
 
 a:link,
 a:visited {
-    color: hsl(0, 100%, 23%);
+    color: rgb(252, 166, 166);
     text-decoration: none;
 }
 
-@media (max-width: 575px) {
-    .navTag {
-        display: none;
-    }
->>>>>>> 5cc82fc (convert to React)
+a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+img {
+    border-radius: 50%;
 }

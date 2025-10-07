@@ -8,14 +8,10 @@ main {
 
 section {
     flex: 1;
-    background-color: white;
-    margin-left: 20px;
-    margin-right: 20px;
 }
 
 section:nth-child(1) {
     flex: 1;
-    background-color: hsl(180, 10%, 80%);
     margin: 0;
     text-align: center;
 }
