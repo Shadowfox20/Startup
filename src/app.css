@@ -6,31 +6,35 @@ body {
 
 header {
     flex: 0 40px;
-    background: hsl(90 87.8% 75.2%);
+    background: hsl(90, 51%, 34%);
     text-align: center;
     font-size: 18px;
+    color: white;
+}
+
+menu {
+    
+    justify-content: center;
+    gap: 0px;
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    flex: 1;
+    background: hsl(205, 11%, 22%);
+    padding: 10px;
+    color: white;
 }
 
 footer {
     flex: 0 30px;
-    background: hsl(90, 87.8%, 75.2%);
-    color: black;
+    background: hsl(90, 51%, 34%);
+    color: white;
     text-align: center;
     margin: 0;
 }
 
 img {
     border-radius: 50%;
-}
-
-a:link,
-a:visited {
-    color: hsl(0, 100%, 23%);
-    text-decoration: none;
-}
-
-@media (max-width: 575px) {
-    .navTag {
-        display: none;
-    }
 }
