@@ -50,7 +50,7 @@ export default function App() {
    <footer className="footer">
     <p>
      Game Shelf by Robert Thompson. Used for CS 260 at BYU.
-     <br />
+     <br className="portrait-only"/>
      <a href="https://github.com/Shadowfox20/Startup"> GitHub </a>
     </p>
    </footer>

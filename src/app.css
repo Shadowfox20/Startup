@@ -19,6 +19,8 @@ header {
     z-index: 1;
     display: flex;
     flex-direction: row;
+    border-bottom: white 2px solid;
+
 }
 
 header h1 {
@@ -72,7 +74,8 @@ footer {
     color: white;
     text-align: center;
     margin: 0;
-    position: fixed;
+    padding-top: 5px;
+    border-top: white 2px solid;
     width: 100%;
     bottom: 0;
     position: sticky;
@@ -120,8 +123,14 @@ img {
     header {
         flex-direction: column;
     }
+}
 
+@media (min-width: 750px) {
     nav {
-        flex: 3;
+        padding-right: calc(100% - 750px);
+    }
+
+    .portrait-only {
+        display: none;
     }
 }
