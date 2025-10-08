@@ -17,7 +17,6 @@ export function Login() {
                 <button type="submit" onclick="document.location='profile'">Login</button>
                 <button type="submit">Forgot Password</button>
             </section>
-            <hr />
             <section>
                 <h2>Create a new profile:</h2>
                 <label for="newUsername">Username:</label>
