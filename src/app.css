@@ -48,7 +48,7 @@ nav {
 
 main {
     flex: 1;
-    top: 80px;
+    margin-top: 111px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,4 +89,22 @@ a:hover {
 
 img {
     border-radius: 50%;
+}
+
+@media (max-height: 615px) {
+    footer {
+        display: none;
+    }
+
+    header {
+        flex: 0 40 px;
+    }
+
+    main {
+        margin-top: 63px;
+    }
+
+    h1 {
+        display: none;
+    }
 }
