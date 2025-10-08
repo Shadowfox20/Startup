@@ -14,12 +14,19 @@ header {
     text-align: center;
     margin: 0;
     padding: 10px;
-    position: fixed;
-    width: 100%;
     top: 0;
+    position: sticky;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+header h1 {
+    flex: 1;
 }
 
 nav {
+    flex: 1;
     justify-content: center;
     margin: 0;
     padding: 0;
@@ -29,6 +36,7 @@ nav {
     justify-content: center;
     background-color: hsl(90, 51%, 34%);
 }
+
 .navbar-nav {
     display: flex;
     flex-direction: row;
@@ -48,13 +56,14 @@ nav {
 
 main {
     flex: 1;
-    margin-top: 111px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     background-color: hsl(208, 7, 46);
     color: white;
+    position: relative;
+    z-index: 0;
 }
 
 footer {
@@ -66,6 +75,8 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
+    position: sticky;
+    z-index: 1;
 }
 
 section {
@@ -100,11 +111,17 @@ img {
         flex: 0 40 px;
     }
 
-    main {
-        margin-top: 63px;
-    }
-
     h1 {
         display: none;
+    }
+}
+
+@media (max-width: 680px) {
+    header {
+        flex-direction: column;
+    }
+
+    nav {
+        flex: 3;
     }
 }

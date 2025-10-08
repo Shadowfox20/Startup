@@ -12,17 +12,3 @@ section {
         flex-direction: column;
     }
 }
-
-@media (max-height: 500px) {
-    footer {
-        display: none;
-    }
-
-    header {
-        flex: 20 px;
-    }
-
-    h1 {
-        display: none;
-    }
-}
