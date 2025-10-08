@@ -9,17 +9,31 @@ header {
     text-align: center;
     font-size: 18px;
     color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 
-menu {
-
+ul {
     justify-content: center;
     gap: 0px;
     margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+ul li {
+    display: block;
+    padding: 14px 16px;
+    text-decoration: none;
+    flex: 1;
+    border-right: 1px solid white;
 }
 
 main {
     flex: 1 calc(100vh - 110px);
+    top: 480px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -34,6 +48,9 @@ footer {
     color: white;
     text-align: center;
     margin: 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 
 section {
