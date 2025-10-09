@@ -65,18 +65,46 @@ element {
 - `element:nth-child(x)` allows you to make specifications for a specific object, the xth instance of the element
 
 ## React:
+### In index.html: 
+- Add the `<head>` content
+- a `<script>` element linking to index.jsx:
+```
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <script type="module" src="/index.jsx"></script>
+</body>
+```
+
+### In index.jsx:
+- link to app.jsx:
+```
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './src/app';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+
+### In app.jsx:
 - Imports:
     - React from "https://esm.sh/react"
     - ReactDOM from "https://esm.sh/react-dom/client"
     - Specific functions from "https://esm.sh/react-router-dom"
-- create a function `Page()` which returns the content of the page
+    - Page content, syntax: `import { Page-name } from './folder/file'`
+    - CSS from app.css
 - create a function `App()` which returns:
     - a `<BrowserRouter>` tag that contains all elements
+        - if you want to add CSS styling for the whole page (e.g. to use flex), put it in a `<div className="app-body">`
     - a `<nav>` element that contains `<NavLink to="/page-name">` elements for each page
-    - a `<main>` element that contains:
-        - a `<Routes>` element (acts like a navbar) which containes `<Route path="/page-name" element={Page} />` elements
-- Ends with
+    - a `<Routes>` element (acts like a navbar) which contains `<Route path="/page-name" element={Page-name} />` elements
+- Ends with:
 ```
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
 ```
+
+### In each page's .jsx file:
+- import the CSS file
+- create a function `Page-name()` which returns the content of the page
