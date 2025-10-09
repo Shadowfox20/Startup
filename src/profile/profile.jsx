@@ -9,19 +9,19 @@ export function Profile() {
                 <p> *Pulls information from WebSocket* </p>
             </section>
             <section>
-                <h2 style="font-size:40px"> <img src="pfp_default.jpg" alt="Default Profile Picture" width="40" height="40" />
+                <h2 style={{ fontSize: "40px" }}> <img src="pfp_default.jpg" alt="Default Profile Picture" width="40" height="40" />
                     Username </h2>
-                <p>Link Steam account <a>here</a> *links to Steam API*</p>
+                <p>Link Steam account <a href="#">here</a> *links to Steam API*</p>
             </section>
-            <h3 style="margin-left: 20px"> Recent Posts: </h3>
+            <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>
             <section>
-                <div class="card-pair">
-                    <div class="card text-bg-secondary mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Clair Obscur: Expedition 33</h5>
-                            <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                                    Playthroughs</strong> in <strong>70</strong> hours </h6>
-                            <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
+                <div className="card-pair">
+                    <div className="card text-bg-secondary mb-3">
+                        <div className="card-body">
+                            <h5 className="card-title">Clair Obscur: Expedition 33</h5>
+                            <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
+                                Playthroughs</strong> in <strong>70</strong> hours </h6>
+                            <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
                             </h6>
                             <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
                                 classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,
@@ -35,12 +35,12 @@ export function Profile() {
                             </p>
                         </div>
                     </div>
-                    <div class="card text-bg-secondary mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Clair Obscur: Expedition 33</h5>
-                            <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                                    Playthroughs</strong> in <strong>70</strong> hours </h6>
-                            <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
+                    <div className="card text-bg-secondary mb-3">
+                        <div className="card-body">
+                            <h5 className="card-title">Clair Obscur: Expedition 33</h5>
+                            <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
+                                Playthroughs</strong> in <strong>70</strong> hours </h6>
+                            <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
                             </h6>
                             <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
                                 classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,

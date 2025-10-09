@@ -14,7 +14,9 @@ export function Login() {
                 <label for="pwd"> Password:</label>
                 <input type="password" id="pwd" name="passwordInput" placeholder="..." />
                 <br />
-                <button type="submit" onclick="document.location='profile'">Login</button>
+                <form action="profile">
+                    <button type="submit" onclick="document.location='profile'">Login</button>
+                </form>
                 <button type="submit">Forgot Password</button>
             </section>
             <section>
