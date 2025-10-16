@@ -7,6 +7,25 @@
 - [MDN](https://developer.mozilla.org)
 - [W3 HTML tutorials](https://w3schools.com/html)
 
+## Console Commands:
+Using GitBash:
+- `chmod`: **mod**ify file permissions
+- `pwd`: "**p**rint **w**orking **d**irectory", returns the path to the current working directory
+- `cd`: "**c**hange **d**irectory", moves to a specified directory
+- `ls`: "**l**i**s**t contents", lists files within the current directory
+    - `-a`: "**a**ll", shows hidden
+    - `-l`: "**l**ong", shows metadata
+    - `-h`: "**h**uman readable", makes meta data more readable (can be combined with `-l` as `-lh`).
+- `vim`/`nano`: text editors. Specify file name.
+- `mkdir`: "**m**a**k**e **dir**ectory", creates a new folder within the current directory. Specify name.
+- `mv`: "**m**o**v**e", change address or name of a file. Specify file and new directory/file name.
+- `rm`: "**r**e**m**ove", removes a file. Specify file name.
+- `man`: similar to `--help`, returns overview and usage of a command.
+- `ssh`: "remote shell session", connects to a website. specify user(ubuntu)@host and key.
+- `ps`: "**p**rocess **s**tatus", displays information about currently running processes
+- `wget`: "**w**eb **get**", downloads a file from the web.
+- `sudo`: "**s**uper **u**ser **do**", executes a command with maximum permissions.
+
 ## GitHub:
 Updating GitHub with changes made locally (using the terminal):
 
@@ -24,8 +43,15 @@ Updating GitHub with changes made locally (using the terminal):
 - Make sure to keep the key pair somewhere secure (you can reuse a key pair for multiple instances)
 
 ### DNS - Domain Name Service:
+- A DNS A record points to the IP address
 - Register a domain using the Route 53 dashboard
 - To connect to an IP, go to "create record" within the hosted zone on AWS
+- A URL is structured: security//:subdomain.root.TLD/file(s)...
+
+### Ports and Security:
+- Port 443: HTTPS (encrypted)
+- Port 80: HTTP (unencrypted)
+- Port 22: SSH (secure shell - logins and file transfers)
 
 ## HTML:
 - The basic skeleton of the page
@@ -108,3 +134,5 @@ root.render(<App />);
 ### In each page's .jsx file:
 - import the CSS file
 - create a function `Page-name()` which returns the content of the page
+
+## Using JS for interactivity:
