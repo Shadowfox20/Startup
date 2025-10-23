@@ -1,5 +1,6 @@
 import './login.css';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
     const navigate = useNavigate();
@@ -33,12 +34,14 @@ export function Login() {
             <p>*uploads/checks information with DB*</p>
             <section>
                 <h2>Login to view profile:</h2>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="usernameInput" placeholder="..." onChange={(e) => setPassword(e.target.value)} required/>
-                <br />
-                <label for="pwd"> Password:</label>
-                <input type="password" id="pwd" name="passwordInput" placeholder="..." onChange={(e) => setUsername(e.target.value)} required/>
-                <br />
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="usernameInput" placeholder="..." onChange={(e) => setUsername(e.target.value)}/>
+                </div>
+                <div>
+                    <label for="pwd"> Password:</label>
+                    <input type="password" id="pwd" name="passwordInput" placeholder="..." onChange={(e) => setPassword(e.target.value)}/>
+                </div>
                 <button type="submit" disabled={!(username && password)} onClick={handleLogin}>Login</button>
                 <button type="submit" disabled={!(username && password)} onClick={handleRegister}>Create Profile</button>
             </section>
