@@ -7,8 +7,19 @@ import { Profile } from './profile/profile';
 import { Post } from './post/post';
 import { Home } from './home/home';
 import { View } from './view/view';
+import { AuthProvider, useAuth } from './auth';
 
 export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
+
+function AppContent() {
+  const { signedIn } = useAuth();
+
   return (
     <BrowserRouter>
       <div className="app-body">
@@ -17,22 +28,33 @@ export default function App() {
           <nav>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <NavLink className="nav-link" to="">
+                <NavLink className="nav-link" to="/">
                   Home
                 </NavLink>
               </li>
+              {!signedIn && (
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              )}
+              {signedIn && (
+                <>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/profile">
+                      Profile
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/post">
+                      Post
+                    </NavLink>
+                  </li>
+                </>
+              )}
               <li className="nav-item">
-                <NavLink className="nav-link" to="login">
-                  Profile
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="post">
-                  Post
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="view">
+                <NavLink className="nav-link" to="/view">
                   View
                 </NavLink>
               </li>
@@ -40,7 +62,7 @@ export default function App() {
           </nav>
         </header>
         <Routes>
-          <Route path='/' element={<Home />} exact />
+          <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/post' element={<Post />} />
           <Route path='/view' element={<View />} />
