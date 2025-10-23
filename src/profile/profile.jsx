@@ -2,6 +2,75 @@ import React from 'react';
 import './profile.css';
 
 export function Profile() {
+    
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = React.useState('');
+
+     React.useEffect(() => {
+        (async () => {
+            const res = await fetch('api/user/me');
+            const data = await res.json();
+            setUserInfo(data);
+        })();
+    }, []);
+
+    function handleLogout() {
+        fetch('api/auth', {
+            method: 'DELETE',
+        });
+        navigate('/');
+    }
+
+    function showPosts(posts) {
+        if (posts.length === 0) {
+            return <p>No posts yet.</p>
+        }
+        else if (posts.length = 1) {
+            const post = posts[0];
+            return (
+                <div className="card text-bg-secondary mb-3">
+                    <div className="card-body">
+                        <h5 className="card-title">{post.title}</h5>
+                        <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion: 
+                        <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
+                        <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
+                        </h6>
+                        <p>{post.review}</p>
+                    </div>
+                </div>
+            );
+        }
+        else {
+            const post = posts[0];
+            const post1 = posts[1];
+            
+            return ( 
+            <div className="card-pair">
+                <div className="card text-bg-secondary mb-3">
+                    <div className="card-body">
+                        <h5 className="card-title">{post.title}</h5>
+                        <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion: 
+                        <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
+                        <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
+                        </h6>
+                        <p>{post.review}</p>
+                    </div>
+                </div>
+                <div className="card text-bg-secondary mb-3">
+                    <div className="card-body">
+                        <h5 className="card-title">{post1.title}</h5>
+                        <h6 className="card-subtitle">Score: <strong>{post1.score}</strong> | Completion: 
+                        <strong>{post1.completion}</strong> in <strong>{post1.hours}</strong> hours </h6>
+                        <h6 className="card-subtitle">Tags: <strong>{post1.tags}</strong>
+                        </h6>
+                        <p>{post1.review}</p>
+                    </div>
+                </div>
+            </div>
+            );
+        }
+    }
+    
     return (
         <main className="container-fluid bg-secondary text-center">
             <section>
@@ -10,12 +79,13 @@ export function Profile() {
             </section>
             <section>
                 <h2 style={{ fontSize: "40px" }}> <img src="pfp_default.jpg" alt="Default Profile Picture" width="40" height="40" />
-                    Username </h2>
+                    {userInfo.username} </h2>
                 <p>Link Steam account <a href="#">here</a> *links to Steam API*</p>
             </section>
             <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>
             <section>
-                <div className="card-pair">
+                {showPosts(userInfo.posts)}
+                {/* <div className="card-pair">
                     <div className="card text-bg-secondary mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Clair Obscur: Expedition 33</h5>
@@ -54,7 +124,7 @@ export function Profile() {
                             </p>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </section>
         </main>
     );
