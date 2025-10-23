@@ -16,16 +16,21 @@ export function Login() {
     }
 
     async function createAuth(method) {
-        const res = await fetch('api/auth', {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        });
-        await res.json();
-        if (res.ok) {
-            navigate('/profile');
-        } else {
-            alert('Authentication failed');
+        try {
+            const res = await fetch('/api/auth', {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                navigate('/profile');
+            } else {
+                alert(data.msg || 'Authentication failed');
+            }
+        } catch (err) {
+            console.error('Auth error:', err);
+            alert('Failed to connect to the server');
         }
     }
 
