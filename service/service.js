@@ -3,13 +3,21 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
+const cors = require('cors');
 
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
+
 app.use((req, res, next) => {
   console.log(req.method);
-  console.log(req.originalURl);
+  console.log(req.originalUrl);
   console.log(req.body);
   console.log(users);
   next();
@@ -35,6 +43,13 @@ app.put('/api/auth', async (req, res) => {
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
+});
+
+app.post('/api/user/me/posts', async (req, res) => {
+  const postContent = req.body.postContent;
+  await addPost(postContent);
+
+  res.send({});
 });
 
 app.delete('/api/auth', async (req, res) => {
@@ -65,12 +80,28 @@ async function createUser(username, password) {
   const user = {
     username: username,
     password: passwordHash,
+    posts: [],
   };
 
   users.push(user);
 
   return user;
 }
+
+async function addPost(postContent) {
+  try {
+    const token = req.cookies['token'];
+    const user = await getUser('token', token);
+
+    user.posts.push(postContent);
+  } 
+  
+  catch (err) {
+    console.error('Add post error:', err);
+  }
+
+  return null;
+};
 
 function getUser(field, value) {
   if (value) {
