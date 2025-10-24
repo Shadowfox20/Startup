@@ -5,6 +5,12 @@ section {
 .card-pair {
     display: flex;
     flex-direction: row;
+    width: 100%;
+}
+
+.card-pair .card {
+    flex: 1;
+    margin: 10px;
 }
 
 @media (max-width: 880px) {

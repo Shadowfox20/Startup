@@ -110,6 +110,24 @@ app.post('/api/user', async (req, res) => {
   }
 });
 
+app.get('/api/posts', (req, res) => {
+  try {
+    const allPosts = users.flatMap((user) => {
+      if (!user.posts) return [];
+      return user.posts.map((p) => ({ ...p, username: user.username }));
+    });
+    res.send({ posts: allPosts });
+  } catch (err) {
+    console.error('GET /api/posts error', err);
+    res.status(500).send({ msg: 'Server error' });
+  }
+});
+
+app.get('/api/user', async (req, res) => {
+  const posts = await compilePosts();
+  res.send({ posts: posts });
+});
+
 
 async function createUser(username, password) {
   const passwordHash = await bcrypt.hash(password, 10);
@@ -144,6 +162,19 @@ async function addPost(token, postContent) {
   }
 };
 
+async function compilePosts() {
+  let posts = [];
+  for (const user of users) {
+    if (user.posts && user.posts.length > 0) {
+      for (const post of user.posts) {
+        posts.push({ username: user.username, ...post });
+      }
+    }
+  }
+
+  console.log('Compiled posts:', posts);
+  return posts;
+}
 
 function getUser(field, value) {
   if (value) {
