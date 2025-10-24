@@ -43,7 +43,6 @@ export function Post() {
       });
 
       if (res.ok) {
-        alert('Review posted successfully!');
         navigate('/profile');
       } else {
         const data = await res.json();
