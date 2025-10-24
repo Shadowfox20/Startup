@@ -9,6 +9,7 @@ main {
 .card-pair {
     display: flex;
     flex-direction: row;
+    width: 100%;
     column-gap: 20px;
 }
 

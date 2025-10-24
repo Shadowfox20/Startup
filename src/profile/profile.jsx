@@ -44,7 +44,7 @@ export function Profile() {
     navigate('/login');
   }
 
-  function showPosts(posts) {
+  function showUserPosts(posts) {
     if (!posts || posts.length === 0) {
       return <p>No posts yet.</p>
     }
@@ -107,7 +107,7 @@ export function Profile() {
       </section>
       <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>
       <section>
-        {showPosts(userInfo.posts)}
+        {showUserPosts(userInfo.posts)}
         {/* <div className="card-pair">
           <div className="card text-bg-secondary mb-3">
             <div className="card-body">
