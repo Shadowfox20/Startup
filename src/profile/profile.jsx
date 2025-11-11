@@ -7,14 +7,14 @@ export function Profile() {
 
   const navigate = useNavigate();
   const { setSignedIn } = useAuth();
-  const [userInfo, setUserInfo] = React.useState({ username: '', posts: [], steamID: '', });
+  const [userInfo, setUserInfo] = React.useState({ username: '', posts: [], steamID: '', avatar: '' });
   const [steamIDInput, setSteamIDInput] = React.useState('');
 
   React.useEffect(() => {
     (async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('/api/user/me', {
+        const res = await fetch('http://localhost:4000/api/user/me', {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,
           },
@@ -63,12 +63,49 @@ export function Profile() {
   }
 
   async function addSteamID() {
-    setUserInfo((prev) => ({ ...prev, steamID: steamIDInput }));
-    setSteamIDInput('');
+
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:4000/api/user/me/steam', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : undefined,
+          },
+          body: JSON.stringify({ steamID: steamIDInput }),
+        });
+        if (res.ok) {
+          setUserInfo((prev) => ({ ...prev, steamID: steamIDInput }));
+          setSteamIDInput('');
+          alert('Steam ID added successfully!');
+        } else {
+          console.error('Failed to add Steam ID');
+          alert('Failed to add Steam ID');
+        }
+      } catch (err) {
+        console.error('Add Steam ID error:', err);
+      }
   }
 
   async function removeSteamID() {
-    setUserInfo((prev) => ({ ...prev, steamID: '' }));
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:4000/api/user/me/steam', {
+        method: 'DELETE',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+      });
+      if (res.ok) {
+        setUserInfo((prev) => ({ ...prev, steamID: '' }));
+        alert('Steam ID removed successfully!');
+      } else {
+        console.error('Failed to remove Steam ID');
+        alert('Failed to remove Steam ID');
+      }
+    } catch (err) {
+      console.error('Remove Steam ID error:', err);
+    }
   }
 
   function showUserPosts(posts) {
@@ -127,10 +164,12 @@ export function Profile() {
         <h2>Your Profile</h2>
       </section>
       <section>
-        <h2 style={{ fontSize: "40px" }}> <img src="pfp_default.jpg" alt="Default Profile Picture" width="40" height="40" />
+        <h2 style={{ fontSize: "40px" }}> <img src={userInfo.avatar} alt="Default Profile Picture" width="40" height="40" />
           {userInfo.username} </h2>
         <button type="submit" onClick={handleLogout}>Logout</button>
-        {showSteamID(userInfo.steamID)}
+        <div id="steam-id-section">
+          {showSteamID(userInfo.steamID)}
+        </div>
         {/* <p>Link Steam account <a href="#">here</a> *links to Steam API*</p> */}
       </section>
       <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>

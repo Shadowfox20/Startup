@@ -238,25 +238,21 @@ async function addSteamID(token, steamID) {
       if (steamDataRes.ok) {
         const steamData = await steamDataRes.json();
         if (steamData && steamData.success === false) {
-          res.status(400).send({ msg: 'Invalid Steam ID' });
+          console.error('Invalid Steam ID');
           return false;
         }
-        else if (steamData && steamData.data && steamData.data.player && steamData.data.player.avatar) {
-          user.avatar = steamData.data.player.avatar;
-        }
         if (steamData && steamData.success === true) {
+          if (steamData.data && steamData.data.player && steamData.data.player.avatar) {
+            user.avatar = steamData.data.player.avatar;
+          }
+          user.steamID = steamID;
+          console.log('Steam ID added:', steamID);
           return true;
-        } else {
-          console.error('Problem fetching from playerdb:', steamData);
         }
       } else {
         console.error('Problem connecting to playerdb');
+        return false;
       }
-
-      user.steamID = steamID;
-
-      console.log('Steam ID added:', steamID);
-      return true;
     } catch (err) {
       console.error('Fetch Steam data error:', err);
       return false;
