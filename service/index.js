@@ -4,15 +4,12 @@ const cookieParser = require('cookie-parser');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+const path = require('path');
 
 app.use(express.static('public'));
 
 app.use(express.json());
 app.use(cookieParser());
-
-app.use((_req, res) => {
-  res.sendFile('index.html', { root: 'public' });
-});
 
 app.use(
   cors({
@@ -20,21 +17,6 @@ app.use(
     credentials: true,
   })
 );
-
-const users = [{
-  username: 'The_Robert_Thompson',
-  password: '$2b$10$VZNhODuw.Pq5bkLq5alkteYllNjVD6qjSjJ2MHQ8T/vfYBq9LIURK',
-  posts: [{
-    title: 'Clair Obscur: Expedition 33',
-    score: '10',
-    hours: '70',
-    completion: 'Multiple Playthroughs',
-    tags: 'Role-Playing Game, Turn-based, Linear, Strategy',
-    review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
-  }],
-  steamID: '76561199810391324',
-  avatar: 'pfp_default.jpg'
-}];
 
 app.use((req, res, next) => {
   console.log(req.method);
@@ -118,8 +100,7 @@ app.post('/api/user', async (req, res) => {
   }
 });
 
-app.post('/api/user/steam', async (req, res) => {
-  const steamID = req.body.steamID;
+app.post('/api/user/me/steam', async (req, res) => {
   const authHeader = req.get('Authorization') || '';
 
   let token = null;
@@ -136,11 +117,38 @@ app.post('/api/user/steam', async (req, res) => {
     }
   }
 
+  const steamID = req.body.steamID;
   const ok = await addSteamID(token, steamID);
+
   if (ok) {
     res.send({});
   } else {
     res.status(400).send({ msg: 'Failed to add Steam ID' });
+  }
+});
+
+app.delete('/api/user/me/steam', async (req, res) => {
+  const authHeader = req.get('Authorization') || '';
+
+  let token = null;
+  if (authHeader.startsWith('Bearer ')) {
+    token = authHeader.slice(7);
+  } else {
+    token = req.cookies && req.cookies['token'];
+  }
+
+  if (!token) {
+    const token = req.body.token;
+    if (!token) {
+      return res.status(401).send({ msg: 'Unauthorized' });
+    }
+  }
+
+  const ok = await removeSteamID(token);
+  if (ok) {
+    res.send({});
+  } else {
+    res.status(400).send({ msg: 'Failed to remove Steam ID' });
   }
 });
 
@@ -162,6 +170,24 @@ app.get('/api/user', async (req, res) => {
   res.send({ posts: posts });
 });
 
+app.use((_req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+const users = [{
+  username: 'The_Robert_Thompson',
+  password: '$2b$10$VZNhODuw.Pq5bkLq5alkteYllNjVD6qjSjJ2MHQ8T/vfYBq9LIURK',
+  posts: [{
+    title: 'Clair Obscur: Expedition 33',
+    score: '10',
+    hours: '70',
+    completion: 'Multiple Playthroughs',
+    tags: 'Role-Playing Game, Turn-based, Linear, Strategy',
+    review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
+  }],
+  steamID: '76561199810391324',
+  avatar: 'pfp_default.jpg'
+}];
 
 async function createUser(username, password) {
   const passwordHash = await bcrypt.hash(password, 10);
@@ -237,6 +263,28 @@ async function addSteamID(token, steamID) {
     }
   } catch (err) {
     console.error('Add Steam ID error:', err);
+    return false;
+  }
+};
+
+async function removeSteamID(token) {
+  try {
+    const user = await getUser('token', token);
+    if (!user) {
+      console.warn('addSteamID: user token not authenticated', token);
+      return false;
+    }
+    try {
+      user.steamID = '';
+      user.avatar = 'pfp_default.jpg';
+      console.log('Steam ID removed');
+      return true;
+    } catch (err) {
+      console.error('Remove Steam ID error:', err);
+      return false;
+    }
+  } catch (err) {
+    console.error('Fetch user error:', err);
     return false;
   }
 };
