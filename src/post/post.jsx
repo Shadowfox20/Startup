@@ -84,9 +84,10 @@ export function Post() {
           <option value="100%">100% Completion</option>
           <option value="Multiple Playthroughs">Multiple Playthroughs</option>
         </select>
-        <br />
-        <label htmlFor="steamAPI"> Link Steam account for achievements:</label>
-        <input type="checkbox" id="steamAPI" name="steamAPIConnect" /> *placeholder for Steam API*
+      </section>
+
+      <section>
+        <button type="submit" onClick={() => handleSubmit()}>Submit Review</button>
       </section>
     </main>
   );
