@@ -19,7 +19,7 @@ export function Login() {
 
   async function createAuth(method) {
     try {
-      const res = await fetch('http://localhost:3000/api/auth', {
+      const res = await fetch('http://localhost:4000/api/auth', {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -47,11 +47,11 @@ export function Login() {
         <h2>Login to view profile:</h2>
         <div>
           <label>Username:</label>
-          <input type="text" id="username" name="usernameInput" placeholder="..." onChange={(e) => setUsername(e.target.value)}/>
+          <input type="text" id="username" name="usernameInput" placeholder="..." onChange={(e) => setUsername(e.target.value)} />
         </div>
         <div>
           <label> Password:</label>
-          <input type="password" id="pwd" name="passwordInput" placeholder="..." onChange={(e) => setPassword(e.target.value)}/>
+          <input type="password" id="pwd" name="passwordInput" placeholder="..." onChange={(e) => setPassword(e.target.value)} />
         </div>
         <button type="submit" disabled={!(username && password)} onClick={handleLogin}>Login</button>
         <button type="submit" disabled={!(username && password)} onClick={handleRegister}>Create Profile</button>

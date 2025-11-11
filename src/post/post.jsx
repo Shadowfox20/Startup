@@ -33,9 +33,9 @@ export function Post() {
         return;
       }
 
-      const res = await fetch('http://localhost:3000/api/user', {
+      const res = await fetch('http://localhost:4000/api/user', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
@@ -63,14 +63,14 @@ export function Post() {
       <section>
         <br />
         <label htmlFor="title">Title of Game:</label>
-        <input type="text" id="title" name="titleInput" placeholder="Game Title" onChange={(e) => setTitle(e.target.value)}/>
+        <input type="text" id="title" name="titleInput" placeholder="Game Title" onChange={(e) => setTitle(e.target.value)} />
         <label htmlFor="score"> Your Score:</label>
-        <input type="number" id="score" name="scoreInput" min="1" max="10" onChange={(e) => setScore(e.target.value)}/>
+        <input type="number" id="score" name="scoreInput" min="1" max="10" onChange={(e) => setScore(e.target.value)} />
         <br /> <br />
         <label htmlFor="tags">Tags:</label>
-        <input type="search" id="tags" name="tagsInput" placeholder="Add tags here..." onChange={(e) => setTags(e.target.value)}/>
+        <input type="search" id="tags" name="tagsInput" placeholder="Add tags here..." onChange={(e) => setTags(e.target.value)} />
         <label htmlFor="hours"> Hours Played:</label>
-        <input type="number" id="hours" name="hoursInput" min="1" max="99999" onChange={(e) => setHours(e.target.value)}/>
+        <input type="number" id="hours" name="hoursInput" min="1" max="99999" onChange={(e) => setHours(e.target.value)} />
         <br /> <br />
         <textarea id="description" name="descriptionInput" rows="6" cols="54"
           placeholder="Write your review here..." onChange={(e) => setReview(e.target.value)}></textarea>

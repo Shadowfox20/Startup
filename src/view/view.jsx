@@ -7,7 +7,7 @@ export function View() {
   React.useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/posts');
+        const res = await fetch('http://localhost:4000/api/posts');
         if (res.ok) {
           const data = await res.json();
           setPosts(data.posts || []);
