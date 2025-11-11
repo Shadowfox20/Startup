@@ -34,7 +34,7 @@ export function View() {
         postElements += 
           `<div class="card text-bg-secondary mb-3">
             <div class="card-body">
-              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+              <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
                 ${post.username} | ${post.title}</h5>
               <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
                 <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
@@ -53,7 +53,7 @@ export function View() {
           `<div class="card-pair">
             <div class="card text-bg-secondary mb-3">
               <div class="card-body">
-                <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+                <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
                   ${post.username} | ${post.title}</h5>
                 <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
                   <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
@@ -64,7 +64,7 @@ export function View() {
             </div>
             <div class="card text-bg-secondary mb-3">
               <div class="card-body">
-                <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+                <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
                   ${post1.username} | ${post1.title}</h5>
                 <h6 class="card-subtitle">Score: <strong>${post1.score}</strong> | Completion:
                   <strong>${post1.completion}</strong> in <strong>${post1.hours}</strong> hours </h6>
