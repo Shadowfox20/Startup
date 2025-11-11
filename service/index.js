@@ -10,6 +10,10 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -21,7 +25,7 @@ const users = [{
   username: 'The_Robert_Thompson',
   password: '$2b$10$VZNhODuw.Pq5bkLq5alkteYllNjVD6qjSjJ2MHQ8T/vfYBq9LIURK',
   posts: [{
-    title: 'Clair Obscur: Expedition',
+    title: 'Clair Obscur: Expedition 33',
     score: '10',
     hours: '70',
     completion: 'Multiple Playthroughs',
