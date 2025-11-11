@@ -88,10 +88,6 @@ export function Post() {
         <label htmlFor="steamAPI"> Link Steam account for achievements:</label>
         <input type="checkbox" id="steamAPI" name="steamAPIConnect" /> *placeholder for Steam API*
       </section>
-
-      <section>
-        <button type="submit" onClick={() => handleSubmit()}>Submit Review</button>
-      </section>
     </main>
   );
 }
