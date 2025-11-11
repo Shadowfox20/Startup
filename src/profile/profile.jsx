@@ -7,13 +7,14 @@ export function Profile() {
 
   const navigate = useNavigate();
   const { setSignedIn } = useAuth();
-  const [userInfo, setUserInfo] = React.useState({ username: '', posts: [] });
+  const [userInfo, setUserInfo] = React.useState({ username: '', posts: [], steamID: '', });
+  const [steamIDInput, setSteamIDInput] = React.useState('');
 
   React.useEffect(() => {
     (async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3000/api/user/me', {
+        const res = await fetch('/api/user/me', {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,
           },
@@ -22,7 +23,6 @@ export function Profile() {
           const data = await res.json();
           setUserInfo(data);
         } else {
-          setUserInfo({ username: '', posts: [] });
           return (
             <p>user info not found</p>
           )
@@ -35,13 +35,40 @@ export function Profile() {
 
   async function handleLogout() {
     try {
-      await fetch('http://localhost:3000/api/auth', { method: 'DELETE', credentials: 'include' });
+      await fetch('http://localhost:4000/api/auth', { method: 'DELETE', credentials: 'include' });
     } catch (err) {
       console.error('Logout error:', err);
     }
     localStorage.removeItem('token');
     setSignedIn(false);
     navigate('/login');
+  }
+
+  function showSteamID(id) {
+    // show input when no steamID, otherwise show the linked id with remove option
+    if (!id) {
+      return (
+        <p>Add a Steam ID: 
+          <input id="enterID" name="SteamIDInput" placeholder="..." value={steamIDInput} onChange={(e) => setSteamIDInput(e.target.value)} />
+          <button type="button" onClick={addSteamID}>Link</button>
+        </p>
+      );
+    }
+
+    return (
+      <p>Steam ID: {id}
+        <button type="button" onClick={removeSteamID}>Remove</button>
+      </p>
+    );
+  }
+
+  async function addSteamID() {
+    setUserInfo((prev) => ({ ...prev, steamID: steamIDInput }));
+    setSteamIDInput('');
+  }
+
+  async function removeSteamID() {
+    setUserInfo((prev) => ({ ...prev, steamID: '' }));
   }
 
   function showUserPosts(posts) {
@@ -54,8 +81,8 @@ export function Profile() {
         <div className="card text-bg-secondary mb-3">
           <div className="card-body">
             <h5 className="card-title">{post.title}</h5>
-            <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion: 
-            <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
+            <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion:
+              <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
             <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
             </h6>
             <p>{post.review}</p>
@@ -66,30 +93,30 @@ export function Profile() {
     else {
       const post = posts[0];
       const post1 = posts[1];
-      
-      return ( 
-      <div className="card-pair">
-        <div className="card text-bg-secondary mb-3">
-          <div className="card-body">
-            <h5 className="card-title">{post.title}</h5>
-            <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion: 
-            <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
-            <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
-            </h6>
-            <p>{post.review}</p>
+
+      return (
+        <div className="card-pair">
+          <div className="card text-bg-secondary mb-3">
+            <div className="card-body">
+              <h5 className="card-title">{post.title}</h5>
+              <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion:
+                <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
+              <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
+              </h6>
+              <p>{post.review}</p>
+            </div>
+          </div>
+          <div className="card text-bg-secondary mb-3">
+            <div className="card-body">
+              <h5 className="card-title">{post1.title}</h5>
+              <h6 className="card-subtitle">Score: <strong>{post1.score}</strong> | Completion:
+                <strong>{post1.completion}</strong> in <strong>{post1.hours}</strong> hours </h6>
+              <h6 className="card-subtitle">Tags: <strong>{post1.tags}</strong>
+              </h6>
+              <p>{post1.review}</p>
+            </div>
           </div>
         </div>
-        <div className="card text-bg-secondary mb-3">
-          <div className="card-body">
-            <h5 className="card-title">{post1.title}</h5>
-            <h6 className="card-subtitle">Score: <strong>{post1.score}</strong> | Completion: 
-            <strong>{post1.completion}</strong> in <strong>{post1.hours}</strong> hours </h6>
-            <h6 className="card-subtitle">Tags: <strong>{post1.tags}</strong>
-            </h6>
-            <p>{post1.review}</p>
-          </div>
-        </div>
-      </div>
       );
     }
   }
@@ -103,51 +130,31 @@ export function Profile() {
         <h2 style={{ fontSize: "40px" }}> <img src="pfp_default.jpg" alt="Default Profile Picture" width="40" height="40" />
           {userInfo.username} </h2>
         <button type="submit" onClick={handleLogout}>Logout</button>
-        <p>Link Steam account <a href="#">here</a> *links to Steam API*</p>
+        {showSteamID(userInfo.steamID)}
+        {/* <p>Link Steam account <a href="#">here</a> *links to Steam API*</p> */}
       </section>
       <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>
       <section>
         {showUserPosts(userInfo.posts)}
-        {/* <div className="card-pair">
-          <div className="card text-bg-secondary mb-3">
-            <div className="card-body">
-              <h5 className="card-title">Clair Obscur: Expedition 33</h5>
-              <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
-                classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,
-                and their big change-up in adding a parry mechanic makes it constantly engaging and
-                rewarding. I also love that this mechanic doesn't detract from the strategic elements. For
-                most of the game, every move requires at least some thought. One thing I cannot talk enough
-                about is the story! It's one of those stories that leaves me thinking about it for months
-                after. I played through as much as I could my first time, and I still couldn't get enough,
-                so I played through it a second time just to play the story again. If you're not sure if you
-                want to play it, just try the first hour of the game, and I promise you'll be hooked!
-              </p>
-            </div>
+        {/*<div className="card text-bg-secondary mb-3">
+          <div className="card-body">
+            <h5 className="card-title">Clair Obscur: Expedition 33</h5>
+            <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
+              Playthroughs</strong> in <strong>70</strong> hours </h6>
+            <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
+            </h6>
+            <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
+              classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,
+              and their big change-up in adding a parry mechanic makes it constantly engaging and
+              rewarding. I also love that this mechanic doesn't detract from the strategic elements. For
+              most of the game, every move requires at least some thought. One thing I cannot talk enough
+              about is the story! It's one of those stories that leaves me thinking about it for months
+              after. I played through as much as I could my first time, and I still couldn't get enough,
+              so I played through it a second time just to play the story again. If you're not sure if you
+              want to play it, just try the first hour of the game, and I promise you'll be hooked!
+            </p>
           </div>
-          <div className="card text-bg-secondary mb-3">
-            <div className="card-body">
-              <h5 className="card-title">Clair Obscur: Expedition 33</h5>
-              <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
-                classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,
-                and their big change-up in adding a parry mechanic makes it constantly engaging and
-                rewarding. I also love that this mechanic doesn't detract from the strategic elements. For
-                most of the game, every move requires at least some thought. One thing I cannot talk enough
-                about is the story! It's one of those stories that leaves me thinking about it for months
-                after. I played through as much as I could my first time, and I still couldn't get enough,
-                so I played through it a second time just to play the story again. If you're not sure if you
-                want to play it, just try the first hour of the game, and I promise you'll be hooked!
-              </p>
-            </div>
-          </div>
-        </div> */}
+        </div>*/}
       </section>
     </main>
   );
