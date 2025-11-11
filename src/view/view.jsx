@@ -23,69 +23,67 @@ export function View() {
   }, []);
 
   function showAllPosts(posts) {
-    let postQty = posts.length;
+    var postQty = posts.length;
     if (!posts || postQty === 0) {
       return <p>No posts yet.</p>
     }
-    var postElements;
+    var postElements = ``;
     while (postQty > 0) {
       if (postQty === 1) {
         const post = posts[0];
-        postElements += (
-          <div className="card text-bg-secondary mb-3">
-            <div className="card-body">
-              <h5 className="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                {post.username} | {post.title}</h5>
-              <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion:
-                <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
-              <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
+        postElements += 
+          `<div class="card text-bg-secondary mb-3">
+            <div class="card-body">
+              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+                ${post.username} | ${post.title}</h5>
+              <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
+                <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
+              <h6 class="card-subtitle">Tags: <strong>${post.tags}</strong>
               </h6>
-              <p>{post.review}</p>
+              <p>${post.review}</p>
             </div>
-          </div>
-        );
+          </div>`;
         postQty -= 1;
       }
       else {
-        const post = posts[postQty - 2];
-        const post1 = posts[postQty - 1];
+        const post = posts[postQty - 1];
+        const post1 = posts[postQty - 2];
 
-        postElements += (
-          <div className="card-pair">
-            <div className="card text-bg-secondary mb-3">
-              <div className="card-body">
-                <h5 className="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                  {post.username} | {post.title}</h5>
-                <h6 className="card-subtitle">Score: <strong>{post.score}</strong> | Completion:
-                  <strong>{post.completion}</strong> in <strong>{post.hours}</strong> hours </h6>
-                <h6 className="card-subtitle">Tags: <strong>{post.tags}</strong>
+        postElements += 
+          `<div class="card-pair">
+            <div class="card text-bg-secondary mb-3">
+              <div class="card-body">
+                <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+                  ${post.username} | ${post.title}</h5>
+                <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
+                  <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
+                <h6 class="card-subtitle">Tags: <strong>${post.tags}</strong>
                 </h6>
-                <p>{post.review}</p>
+                <p>${post.review}</p>
               </div>
             </div>
-            <div className="card text-bg-secondary mb-3">
-              <div className="card-body">
-                <h5 className="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                  {post1.username} | {post1.title}</h5>
-                <h6 className="card-subtitle">Score: <strong>{post1.score}</strong> | Completion:
-                  <strong>{post1.completion}</strong> in <strong>{post1.hours}</strong> hours </h6>
-                <h6 className="card-subtitle">Tags: <strong>{post1.tags}</strong>
+            <div class="card text-bg-secondary mb-3">
+              <div class="card-body">
+                <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
+                  ${post1.username} | ${post1.title}</h5>
+                <h6 class="card-subtitle">Score: <strong>${post1.score}</strong> | Completion:
+                  <strong>${post1.completion}</strong> in <strong>${post1.hours}</strong> hours </h6>
+                <h6 class="card-subtitle">Tags: <strong>${post1.tags}</strong>
                 </h6>
-                <p>{post1.review}</p>
+                <p>${post1.review}</p>
               </div>
             </div>
-          </div>
-        );
+          </div>`;
         postQty -= 2;
       }
     }
-
-    return postElements;
+    document.getElementById('all-posts').innerHTML = postElements;
   }
 
   return (
     <main className="container-fluid bg-secondary text-center">
       <section>
+        <div id="all-posts" />
         {showAllPosts(posts)}
         {/* <div class="card-pair">
           <div class="card text-bg-secondary mb-3">
