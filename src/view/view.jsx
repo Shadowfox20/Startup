@@ -27,6 +27,15 @@ export function View() {
     if (!posts || postQty === 0) {
       return <p>No posts yet.</p>
     }
+
+    function linkSteam(post) {
+      if (post.steamID === '') {
+        return `${post.username}`;
+      } else {
+        return `<a href="https://steamcommunity.com/profiles/${post.steamID}">${post.username}</a>`;
+      }
+    }
+
     var postElements = ``;
     while (postQty > 0) {
       if (postQty === 1) {
@@ -35,7 +44,7 @@ export function View() {
           `<div class="card text-bg-secondary mb-3">
             <div class="card-body">
               <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
-                ${post.username} | ${post.title}</h5>
+                ${linkSteam(post)} | ${post.title}</h5>
               <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
                 <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
               <h6 class="card-subtitle">Tags: <strong>${post.tags}</strong>
@@ -54,7 +63,7 @@ export function View() {
             <div class="card text-bg-secondary mb-3">
               <div class="card-body">
                 <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
-                  ${post.username} | ${post.title}</h5>
+                  ${linkSteam(post)} | ${post.title}</h5>
                 <h6 class="card-subtitle">Score: <strong>${post.score}</strong> | Completion:
                   <strong>${post.completion}</strong> in <strong>${post.hours}</strong> hours </h6>
                 <h6 class="card-subtitle">Tags: <strong>${post.tags}</strong>
@@ -65,7 +74,7 @@ export function View() {
             <div class="card text-bg-secondary mb-3">
               <div class="card-body">
                 <h5 class="card-title"><img src=${post.avatar} alt="Profile Picture" width="20" height="20" />
-                  ${post1.username} | ${post1.title}</h5>
+                  ${linkSteam(post1)} | ${post1.title}</h5>
                 <h6 class="card-subtitle">Score: <strong>${post1.score}</strong> | Completion:
                   <strong>${post1.completion}</strong> in <strong>${post1.hours}</strong> hours </h6>
                 <h6 class="card-subtitle">Tags: <strong>${post1.tags}</strong>
