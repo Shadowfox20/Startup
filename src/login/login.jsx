@@ -19,19 +19,25 @@ export function Login() {
 
   async function createAuth(method) {
     try {
+      //send data to backend
       const res = await fetch('http://localhost:4000/api/auth', {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
+
+      //updates local token & auth state
       if (res.ok) {
         if (data && data.token) {
           localStorage.setItem('token', data.token);
         }
         setSignedIn(true);
         navigate('/profile');
-      } else {
+      } 
+      
+      //failure & error cases
+      else {
         alert(data.msg || 'Authentication failed');
       }
     } catch (err) {

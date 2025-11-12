@@ -26,10 +26,15 @@ app.use((req, res, next) => {
   next();
 });
 
+//Create new user (include username & password in body)
 app.post('/api/auth', async (req, res) => {
+  //check if user already exists
   if (await getUser('username', req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
-  } else {
+  } 
+  
+  //create user
+  else {
     const user = await createUser(req.body.username, req.body.password);
     setAuthCookie(res, user);
 
@@ -37,19 +42,30 @@ app.post('/api/auth', async (req, res) => {
   }
 });
 
+
+//Sign in existing user (include username & password in body)
 app.put('/api/auth', async (req, res) => {
   const user = await getUser('username', req.body.username);
+  // validate password
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
+    //set session cookie
     setAuthCookie(res, user);
+    //return user info
     res.send({ username: user.username, token: user.token, steamID: user.steamID, avatar: user.avatar});
-  } else {
+  } 
+  // invalid credentials
+  else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 });
 
+//Logout user (clears cookie)
 app.delete('/api/auth', async (req, res) => {
+  //retrieve user by token
   const token = req.cookies['token'];
   const user = await getUser('token', token);
+
+  //clear session cookie
   if (user) {
     clearAuthCookie(res, user);
   }
@@ -57,7 +73,9 @@ app.delete('/api/auth', async (req, res) => {
   res.send({});
 });
 
+//Retrieve user info (must attach token in Authorization header)
 app.get('/api/user/me', async (req, res) => {
+  //check token
   const authHeader = req.get('Authorization') || '';
   let token = null;
   if (authHeader.startsWith('Bearer ')) {
@@ -73,25 +91,24 @@ app.get('/api/user/me', async (req, res) => {
   }
 });
 
+// Add new post (must attach token in header & post content in body)
 app.post('/api/user', async (req, res) => {
   console.log('Received post request with body:', req.body);
   const postContent = req.body.postContent;
   const authHeader = req.get('Authorization') || '';
 
+  //checks header for token, if not found checks cookies
   let token = null;
   if (authHeader.startsWith('Bearer ')) {
     token = authHeader.slice(7);
   } else {
     token = req.cookies && req.cookies['token'];
   }
-
   if (!token) {
-    const token = req.body.token;
-    if (!token) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
+    return res.status(401).send({ msg: 'Unauthorized' });
   }
 
+  //calls addPost function
   const ok = await addPost(token, postContent);
   if (ok) {
     res.send({});
@@ -100,23 +117,22 @@ app.post('/api/user', async (req, res) => {
   }
 });
 
+// Add Steam ID to user profile (must attach token in header & steamID in body)
 app.post('/api/user/me/steam', async (req, res) => {
   const authHeader = req.get('Authorization') || '';
 
+  //checks header for token, if not found checks cookies
   let token = null;
   if (authHeader.startsWith('Bearer ')) {
     token = authHeader.slice(7);
   } else {
     token = req.cookies && req.cookies['token'];
   }
-
   if (!token) {
-    const token = req.body.token;
-    if (!token) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
+    return res.status(401).send({ msg: 'Unauthorized' });
   }
 
+  //calls addSteamID function
   const steamID = req.body.steamID;
   const ok = await addSteamID(token, steamID);
 
@@ -127,23 +143,22 @@ app.post('/api/user/me/steam', async (req, res) => {
   }
 });
 
+// Remove Steam ID from user profile (must attach token in header)
 app.delete('/api/user/me/steam', async (req, res) => {
   const authHeader = req.get('Authorization') || '';
 
+  //checks header for token, if not found checks cookies
   let token = null;
   if (authHeader.startsWith('Bearer ')) {
     token = authHeader.slice(7);
   } else {
     token = req.cookies && req.cookies['token'];
   }
-
   if (!token) {
-    const token = req.body.token;
-    if (!token) {
-      return res.status(401).send({ msg: 'Unauthorized' });
-    }
+    return res.status(401).send({ msg: 'Unauthorized' });
   }
 
+  //calls removeSteamID function
   const ok = await removeSteamID(token);
   if (ok) {
     res.send({});
@@ -152,12 +167,11 @@ app.delete('/api/user/me/steam', async (req, res) => {
   }
 });
 
+//Retrieve all posts (no auth required)
 app.get('/api/posts', (req, res) => {
   try {
-    const allPosts = users.flatMap((user) => {
-      if (!user.posts) return [];
-      return user.posts.map((p) => ({ ...p, username: user.username, steamID: user.steamID, avatar: user.avatar }));
-    });
+    //calls compilePosts function
+    const allPosts = compilePosts();
     res.send({ posts: allPosts });
   } catch (err) {
     console.error('GET /api/posts error', err);
@@ -165,15 +179,12 @@ app.get('/api/posts', (req, res) => {
   }
 });
 
-app.get('/api/user', async (req, res) => {
-  const posts = await compilePosts();
-  res.send({ posts: posts });
-});
-
+//sets routing for frontend
 app.use((_req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+// sets user database, initial user for testing
 const users = [{
   username: 'The_Robert_Thompson',
   password: '$2b$10$VZNhODuw.Pq5bkLq5alkteYllNjVD6qjSjJ2MHQ8T/vfYBq9LIURK',
@@ -190,8 +201,10 @@ const users = [{
 }];
 
 async function createUser(username, password) {
+  //encrypts password
   const passwordHash = await bcrypt.hash(password, 10);
 
+  //creates user object
   const user = {
     username: username,
     password: passwordHash,
@@ -200,19 +213,31 @@ async function createUser(username, password) {
     avatar: 'pfp_default.jpg'
   };
 
+  //adds user to database
   users.push(user);
 
   return user;
 }
 
+//postContent structure:
+// {
+//   title: string,
+//   score: string,
+//   tags: string,
+//   hours: string,
+//   review: string,
+//   completion: string
+// }
 async function addPost(token, postContent) {
   try {
+    //retrieve user by token
     const user = await getUser('token', token);
     if (!user) {
       console.warn('addPost: no user for token', token);
       return false;
     }
 
+    //add post to user's posts
     if (!user.posts) user.posts = [];
     user.posts.push(postContent);
     console.log('Post added:', postContent);
@@ -224,8 +249,10 @@ async function addPost(token, postContent) {
   }
 };
 
+// SteamID should be a string
 async function addSteamID(token, steamID) {
   try {
+    // retrieve user by token
     const user = await getUser('token', token);
     if (!user) {
       console.warn('addSteamID: user token not authenticated', token);
@@ -233,23 +260,34 @@ async function addSteamID(token, steamID) {
     }
 
     try {
+      //fetches Steam data from playerdb.co API
       const steamDataRes = await fetch(`https://playerdb.co/api/player/steam/${steamID}`);
 
       if (steamDataRes.ok) {
         const steamData = await steamDataRes.json();
-        if (steamData && steamData.success === false) {
+
+        //validates Steam ID
+        if (steamData.success === false) {
           console.error('Invalid Steam ID');
           return false;
         }
-        if (steamData && steamData.success === true) {
-          if (steamData.data && steamData.data.player && steamData.data.player.avatar) {
+
+        //update user profile in database
+        else {
+          //updates user profile with Steam data
+          if (steamData.data.player.avatar) {
             user.avatar = steamData.data.player.avatar;
           }
+
+          //adds Steam ID
           user.steamID = steamID;
           console.log('Steam ID added:', steamID);
           return true;
         }
-      } else {
+      } 
+      
+      //failure and error cases
+      else {
         console.error('Problem connecting to playerdb');
         return false;
       }
@@ -265,12 +303,14 @@ async function addSteamID(token, steamID) {
 
 async function removeSteamID(token) {
   try {
+    // retrieve user by token
     const user = await getUser('token', token);
     if (!user) {
       console.warn('addSteamID: user token not authenticated', token);
       return false;
     }
     try {
+      //removes Steam ID and resets avatar to default in database
       user.steamID = '';
       user.avatar = 'pfp_default.jpg';
       console.log('Steam ID removed');
@@ -286,6 +326,7 @@ async function removeSteamID(token) {
 };
 
 async function compilePosts() {
+  //loops through all users and compiles their posts into a single array
   let posts = [];
   for (const user of users) {
     if (user.posts && user.posts.length > 0) {
@@ -293,10 +334,8 @@ async function compilePosts() {
         posts.push({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...post });
       }
     }
+    return posts;
   }
-
-  console.log('Compiled posts:', posts);
-  return posts;
 }
 
 function getUser(field, value) {

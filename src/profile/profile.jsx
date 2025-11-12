@@ -13,7 +13,14 @@ export function Profile() {
   React.useEffect(() => {
     (async () => {
       try {
+        //verifies user has a token
         const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        //retrieves user info from backend
         const res = await fetch('http://localhost:4000/api/user/me', {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,
@@ -22,7 +29,10 @@ export function Profile() {
         if (res.ok) {
           const data = await res.json();
           setUserInfo(data);
-        } else {
+        } 
+        
+        //failure and error cases
+        else {
           return (
             <p>user info not found</p>
           )
@@ -63,32 +73,37 @@ export function Profile() {
   }
 
   async function addSteamID() {
-
     try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:4000/api/user/me/steam', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : undefined,
-          },
-          body: JSON.stringify({ steamID: steamIDInput }),
-        });
-        if (res.ok) {
-          setUserInfo((prev) => ({ ...prev, steamID: steamIDInput }));
-          setSteamIDInput('');
-          alert('Steam ID added successfully!');
-        } else {
-          console.error('Failed to add Steam ID');
-          alert('Failed to add Steam ID');
-        }
-      } catch (err) {
-        console.error('Add Steam ID error:', err);
+      //send add request to backend
+      const token = localStorage.getItem('token');
+      const res = await fetch('http://localhost:4000/api/user/me/steam', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        body: JSON.stringify({ steamID: steamIDInput }),
+      });
+      if (res.ok) {
+        //update local state, notify user
+        setUserInfo((prev) => ({ ...prev, steamID: steamIDInput }));
+        setSteamIDInput('');
+        alert('Steam ID added successfully!');
+      } 
+      
+      //failure and error cases
+      else {
+        console.error('Failed to add Steam ID');
+        alert('Failed to add Steam ID');
       }
+    } catch (err) {
+      console.error('Add Steam ID error:', err);
+    }
   }
 
   async function removeSteamID() {
     try {
+      //send remove request to backend
       const token = localStorage.getItem('token');
       const res = await fetch('http://localhost:4000/api/user/me/steam', {
         method: 'DELETE',
@@ -97,9 +112,13 @@ export function Profile() {
         },
       });
       if (res.ok) {
+        //update local state, notify user
         setUserInfo((prev) => ({ ...prev, steamID: '' }));
         alert('Steam ID removed successfully!');
-      } else {
+      } 
+      
+      //failure and error cases
+      else {
         console.error('Failed to remove Steam ID');
         alert('Failed to remove Steam ID');
       }
@@ -112,6 +131,8 @@ export function Profile() {
     if (!posts || posts.length === 0) {
       return <p>No posts yet.</p>
     }
+
+    //format posts display based on number of posts, up to 2
     else if (posts.length === 1) {
       const post = posts[0];
       return (
@@ -170,30 +191,10 @@ export function Profile() {
         <div id="steam-id-section">
           {showSteamID(userInfo.steamID)}
         </div>
-        {/* <p>Link Steam account <a href="#">here</a> *links to Steam API*</p> */}
       </section>
       <h3 style={{ marginLeft: "20px" }}> Recent Posts: </h3>
       <section>
         {showUserPosts(userInfo.posts)}
-        {/*<div className="card text-bg-secondary mb-3">
-          <div className="card-body">
-            <h5 className="card-title">Clair Obscur: Expedition 33</h5>
-            <h6 className="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-              Playthroughs</strong> in <strong>70</strong> hours </h6>
-            <h6 className="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-            </h6>
-            <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of
-              classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly,
-              and their big change-up in adding a parry mechanic makes it constantly engaging and
-              rewarding. I also love that this mechanic doesn't detract from the strategic elements. For
-              most of the game, every move requires at least some thought. One thing I cannot talk enough
-              about is the story! It's one of those stories that leaves me thinking about it for months
-              after. I played through as much as I could my first time, and I still couldn't get enough,
-              so I played through it a second time just to play the story again. If you're not sure if you
-              want to play it, just try the first hour of the game, and I promise you'll be hooked!
-            </p>
-          </div>
-        </div>*/}
       </section>
     </main>
   );

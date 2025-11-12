@@ -26,13 +26,15 @@ export function Post() {
 
   async function addPost(postContent) {
     try {
+      //verify login
       const token = localStorage.getItem('token');
       if (!token) {
         alert('Please log in to post a review');
         navigate('/login');
         return;
       }
-
+      
+      //send post to backend
       const res = await fetch('http://localhost:4000/api/user', {
         method: 'POST',
         headers: {
@@ -44,7 +46,10 @@ export function Post() {
 
       if (res.ok) {
         navigate('/profile');
-      } else {
+      } 
+      
+      //failure and error cases
+      else {
         const data = await res.json();
         alert(data.msg || 'Failed to post review');
       }
@@ -77,7 +82,7 @@ export function Post() {
         <br /> <br />
         <label htmlFor="completion"> completion level: </label>
         <select id="completion" name="completionInput" onChange={(e) => setCompletion(e.target.value)}>
-          <option value="">Not Applicable</option>
+          <option value="n/a">Not Applicable</option>
           <option value="First Impressions">First Impressions</option>
           <option value="In Progress">In Progress</option>
           <option value="Finished">Finished</option>

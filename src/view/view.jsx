@@ -28,6 +28,7 @@ export function View() {
       return <p>No posts yet.</p>
     }
 
+    //helper to link Steam profile if available
     function linkSteam(post) {
       if (post.steamID === '') {
         return `${post.username}`;
@@ -36,6 +37,7 @@ export function View() {
       }
     }
 
+    //loops through posts, converting to HTML
     var postElements = ``;
     while (postQty > 0) {
       if (postQty === 1) {
@@ -54,6 +56,8 @@ export function View() {
           </div>`;
         postQty -= 1;
       }
+
+      //if it can, make pairs of posts which can be displayed side-by-side based on window size via css flexbox
       else {
         const post = posts[postQty - 1];
         const post1 = posts[postQty - 2];
@@ -94,92 +98,6 @@ export function View() {
       <section>
         <div id="all-posts" />
         {showAllPosts(posts)}
-        {/* <div class="card-pair">
-          <div class="card text-bg-secondary mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                Username | Clair Obscur: Expedition 33</h5>
-              <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                  Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of classic
-                RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their
-                big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love
-                that this mechanic doesn't detract from the strategic elements. For most of the game, every move
-                requires at least some thought. One thing I cannot talk enough about is the story! It's one of
-                those stories that leaves me thinking about it for months after. I played through as much as I
-                could my first time, and I still couldn't get enough, so I played through it a second time just
-                to play the story again. If you're not sure if you want to play it, just try the first hour of
-                the game, and I promise you'll be hooked!
-              </p>
-            </div>
-          </div>
-          <div class="card text-bg-secondary mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                Username | Clair Obscur: Expedition 33</h5>
-              <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                  Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of classic
-                RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their
-                big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love
-                that this mechanic doesn't detract from the strategic elements. For most of the game, every move
-                requires at least some thought. One thing I cannot talk enough about is the story! It's one of
-                those stories that leaves me thinking about it for months after. I played through as much as I
-                could my first time, and I still couldn't get enough, so I played through it a second time just
-                to play the story again. If you're not sure if you want to play it, just try the first hour of
-                the game, and I promise you'll be hooked!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="card-pair">
-          <div class="card text-bg-secondary mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                Username | Clair Obscur: Expedition 33</h5>
-              <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                  Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of classic
-                RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their
-                big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love
-                that this mechanic doesn't detract from the strategic elements. For most of the game, every move
-                requires at least some thought. One thing I cannot talk enough about is the story! It's one of
-                those stories that leaves me thinking about it for months after. I played through as much as I
-                could my first time, and I still couldn't get enough, so I played through it a second time just
-                to play the story again. If you're not sure if you want to play it, just try the first hour of
-                the game, and I promise you'll be hooked!
-              </p>
-            </div>
-          </div>
-          <div class="card text-bg-secondary mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><img src="pfp_default.jpg" alt="Default Profile Picture" width="20" height="20" />
-                Username | Clair Obscur: Expedition 33</h5>
-              <h6 class="card-subtitle">Score: <strong>10</strong> | Completion: <strong>Multiple
-                  Playthroughs</strong> in <strong>70</strong> hours </h6>
-              <h6 class="card-subtitle">Tags: <strong>Role-Playing Game, Turn-based, Linear, Strategy</strong>
-              </h6>
-              <p>Review: The game is incredible. I enjoy turn-based combat, and have played a variety of classic
-                RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their
-                big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love
-                that this mechanic doesn't detract from the strategic elements. For most of the game, every move
-                requires at least some thought. One thing I cannot talk enough about is the story! It's one of
-                those stories that leaves me thinking about it for months after. I played through as much as I
-                could my first time, and I still couldn't get enough, so I played through it a second time just
-                to play the story again. If you're not sure if you want to play it, just try the first hour of
-                the game, and I promise you'll be hooked!
-              </p>
-            </div>
-          </div>
-        </div> */}
       </section>
     </main>
   );
