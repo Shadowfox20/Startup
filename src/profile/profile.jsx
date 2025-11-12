@@ -149,8 +149,8 @@ export function Profile() {
       );
     }
     else {
-      const post = posts[1];
-      const post1 = posts[0];
+      const post = posts[posts.length - 1];
+      const post1 = posts[posts.length - 2];
 
       return (
         <div className="card-pair">
