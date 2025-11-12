@@ -29,6 +29,7 @@ export function View() {
   }, []);
 
   function PostCard({ post }) {
+    //sets default avatar and formats steam page link
     const avatar = post.avatar && post.avatar.length ? post.avatar : '/pfp_default.jpg';
     const author = post.steamID ? (
       <a href={`https://steamcommunity.com/profiles/${post.steamID}`} target="_blank" rel="noopener noreferrer">{post.username}</a>
@@ -36,6 +37,7 @@ export function View() {
       <span>{post.username}</span>
     );
 
+    //structure of each post card
     return (
       <div className="card text-bg-secondary mb-3">
         <div className="card-body">
