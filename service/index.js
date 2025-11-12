@@ -19,9 +19,6 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  console.log(req.method);
-  console.log(req.originalUrl);
-  console.log(users);
   next();
 });
 
@@ -92,7 +89,6 @@ app.get('/api/user/me', async (req, res) => {
 
 // Add new post (must attach token in header & post content in body)
 app.post('/api/user', async (req, res) => {
-  console.log('Received post request with body:', req.body);
   const postContent = req.body.postContent;
   const authHeader = req.get('Authorization') || '';
 
@@ -171,7 +167,6 @@ app.get('/api/posts', (req, res) => {
   try {
     //calls compilePosts function
     const allPosts = compilePosts();
-    console.log(allPosts);
     res.send({ posts: allPosts });
   } catch (err) {
     console.error('GET /api/posts error', err);
@@ -199,6 +194,18 @@ const users = [{
   steamID: '76561199810391324',
   avatar: 'https://avatars.steamstatic.com/4c247d2901ddff377da7010b76d4ea374d47c175_full.jpg'
 }];
+
+const posts = [{
+    title: 'Clair Obscur: Expedition 33',
+    score: '10',
+    hours: '70',
+    completion: 'Multiple Playthroughs',
+    tags: 'Role-Playing Game, Turn-based, Linear, Strategy',
+    review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
+    username: 'The_Robert_Thompson', 
+    steamID: '76561199810391324', 
+    avatar: 'https://avatars.steamstatic.com/4c247d2901ddff377da7010b76d4ea374d47c175_full.jpg'
+  }];
 
 async function createUser(username, password) {
   //encrypts password
@@ -240,8 +247,7 @@ async function addPost(token, postContent) {
     //add post to user's posts
     if (!user.posts) user.posts = [];
     user.posts.push(postContent);
-    console.log('Post added:', postContent);
-    console.log('User posts:', user.posts);
+    posts.unshift({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...postContent });
     return true;
   } catch (err) {
     console.error('Add post error:', err);
@@ -281,7 +287,6 @@ async function addSteamID(token, steamID) {
 
           //adds Steam ID
           user.steamID = steamID;
-          console.log('Steam ID added:', steamID);
           return true;
         }
       } 
@@ -313,7 +318,6 @@ async function removeSteamID(token) {
       //removes Steam ID and resets avatar to default in database
       user.steamID = '';
       user.avatar = 'pfp_default.jpg';
-      console.log('Steam ID removed');
       return true;
     } catch (err) {
       console.error('Remove Steam ID error:', err);
@@ -326,15 +330,7 @@ async function removeSteamID(token) {
 };
 
 function compilePosts() {
-  //loops through all users and compiles their posts into a single array
-  var posts = [];
-  for (const user of users) {
-    if (user.posts && user.posts.length > 0) {
-      for (const post of user.posts) {
-        posts.push({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...post });
-      }
-    }
-  }
+  //returns the posts array
   return posts;
 }
 
