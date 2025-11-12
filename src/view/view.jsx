@@ -57,8 +57,8 @@ export function View() {
           <p>No posts yet.</p>
         ) : (
           <div id="all-posts">
-            {posts.map((p, i) => (
-              <PostCard key={p.id || i} post={p} />
+            {posts.map((post, idx) => (
+              <PostCard key={post.id || idx} post={post} />
             ))}
           </div>
         )}
