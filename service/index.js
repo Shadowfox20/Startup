@@ -21,7 +21,6 @@ app.use(
 app.use((req, res, next) => {
   console.log(req.method);
   console.log(req.originalUrl);
-  console.log(req.body);
   console.log(users);
   next();
 });
@@ -172,6 +171,7 @@ app.get('/api/posts', (req, res) => {
   try {
     //calls compilePosts function
     const allPosts = compilePosts();
+    console.log(allPosts);
     res.send({ posts: allPosts });
   } catch (err) {
     console.error('GET /api/posts error', err);
@@ -197,7 +197,7 @@ const users = [{
     review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
   }],
   steamID: '76561199810391324',
-  avatar: 'pfp_default.jpg'
+  avatar: 'https://avatars.steamstatic.com/4c247d2901ddff377da7010b76d4ea374d47c175_full.jpg'
 }];
 
 async function createUser(username, password) {
@@ -325,19 +325,20 @@ async function removeSteamID(token) {
   }
 };
 
-async function compilePosts() {
+function compilePosts() {
   //loops through all users and compiles their posts into a single array
-  let posts = [];
+  var posts = [];
   for (const user of users) {
     if (user.posts && user.posts.length > 0) {
       for (const post of user.posts) {
         posts.push({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...post });
       }
     }
-    return posts;
   }
+  return posts;
 }
 
+// retrieves a user from the database by a specified field and value, such as 'username' or 'token'
 function getUser(field, value) {
   if (value) {
     return users.find((user) => user[field] === value);
