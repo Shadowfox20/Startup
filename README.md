@@ -102,20 +102,20 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - backend that is called via api
+- [x] **Static middleware for frontend** - public folder for default pfp and app logo
+- [x] **Calls to third party endpoints** - Calls playerdb to retrieve avatar based on steam ID
+- [x] **Backend service endpoints** - endpoints for adding users, signing in, adding posts, and viewing posts
+- [x] **Frontend calls service endpoints** - all endpoints are called
+- [x] **Supports registration, login, logout, and restricted endpoint** - only verified users are able to make posts and view profile
 
 
 ## 🚀 DB deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] **Stores data in MongoDB** - users and posts are stored
+- [x] **Stores credentials in MongoDB** - updates user doc with tokens
 
 ## 🚀 WebSocket deliverable
 
