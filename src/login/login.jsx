@@ -48,7 +48,6 @@ export function Login() {
 
   return (
     <main className="container-fluid bg-secondary text-center">
-      <p>*uploads/checks information with DB*</p>
       <section>
         <h2>Login to view profile:</h2>
         <div>
