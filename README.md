@@ -39,7 +39,8 @@ sequenceDiagram
 
 - Creating an account
 - Posting a review
-- Viewing other profiles
+- Viewing user profile
+- Viewing posts
 
 ### Technologies
 
