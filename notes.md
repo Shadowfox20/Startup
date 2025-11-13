@@ -135,4 +135,51 @@ root.render(<App />);
 - import the CSS file
 - create a function `Page-name()` which returns the content of the page
 
-## Using JS for interactivity:
+## Node.js:
+- Create endpoints in `service/index.js` to allow front end to connect back end
+- Format endpoints:
+```
+app.<function>('<dir>', async (req, res) => {
+    //insert code
+});
+```
+- In front end:
+```
+const res = await fetch('<dir>', {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ <data> }),
+});
+const data = await res.json();
+```
+
+## Mongo.db
+### In `service/dbConfig.json`: 
+```
+{
+  "hostname": "<cluster name>.<code>.mongodb.net",
+  "userName": "<username>",
+  "password": "<password>"
+}
+```
+
+### In `service/index.js`:
+```
+const { MongoClient } = require('mongodb');
+const config = require('./dbConfig.json');
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+
+const client = new MongoClient(url);
+const db = client.db('<database name>');
+const collection = db.collection('<collection name>');
+```
+
+### Retrieving data:
+- `collection.findOne({ attr: val })` finds the first object in the collection with the specified attribute (e.g. username or token)
+- `collection.find({ attr: val })` finds all objects in the collection with the specified attributes
+    - optionally you can sort with `.sort({ attr: direction })`, with `1` indicating ascending and `-1` indicating descending
+    - format the data as an array with `.toArray()`
+
+### Sending data:
+- `collection.insertOne({ })` adds a new object to the collection
+- `userCollection.updateOne({ <find values> }, { $set: { attr: value } })`
