@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 
 const { MongoClient } = require('mongodb');
-const config = require('../dbConfig.json');
+const config = require('./dbConfig.json');
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 
 // Connect to the database clusters
@@ -30,7 +30,7 @@ const postCollection = db.collection('posts');
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.NODE_ENV === 'production' ? 'https://startup.robertthompson.click' : 'http://localhost:5173',
     credentials: true,
   })
 );
@@ -334,7 +334,7 @@ function setAuthCookie(res, user) {
   userCollection.updateOne({ username: user.username }, { $set: { token: user.token } });
 
   res.cookie('token', user.token, {
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'strict',
   });

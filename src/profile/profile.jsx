@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth';
 
 export function Profile() {
-
+  const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://startup.robertthompson.click' 
+  : 'http://localhost:4000';
   const navigate = useNavigate();
   const { setSignedIn } = useAuth();
   const [userInfo, setUserInfo] = React.useState({ username: '', posts: [], steamID: '', avatar: '' });
@@ -21,7 +23,7 @@ export function Profile() {
         }
 
         //retrieves user info from backend
-        const res = await fetch('http://localhost:4000/api/user/me', {
+        const res = await fetch(`${API_BASE}/api/user/me`, {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,
           },
@@ -45,7 +47,7 @@ export function Profile() {
 
   async function handleLogout() {
     try {
-      await fetch('http://localhost:4000/api/auth', { method: 'DELETE', credentials: 'include' });
+      await fetch(`${API_BASE}/api/auth`, { method: 'DELETE', credentials: 'include' });
     } catch (err) {
       console.error('Logout error:', err);
     }
@@ -76,7 +78,7 @@ export function Profile() {
     try {
       //send add request to backend
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:4000/api/user/me/steam', {
+      const res = await fetch(`${API_BASE}/api/user/me/steam`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +107,7 @@ export function Profile() {
     try {
       //send remove request to backend
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:4000/api/user/me/steam', {
+      const res = await fetch(`${API_BASE}/api/user/me/steam`, {
         method: 'DELETE',
         headers: {
           Authorization: token ? `Bearer ${token}` : undefined,

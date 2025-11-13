@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth';
 
 export function Login() {
+  const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://startup.robertthompson.click' 
+  : 'http://localhost:4000';
   const navigate = useNavigate();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -20,7 +23,7 @@ export function Login() {
   async function createAuth(method) {
     try {
       //send data to backend
-      const res = await fetch('http://localhost:4000/api/auth', {
+      const res = await fetch(`${API_BASE}/api/auth`, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

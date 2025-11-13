@@ -3,6 +3,9 @@ import './post.css';
 import { useNavigate } from 'react-router-dom';
 
 export function Post() {
+  const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://startup.robertthompson.click' 
+  : 'http://localhost:4000';
   const navigate = useNavigate();
   const [title, setTitle] = React.useState('');
   const [score, setScore] = React.useState('');
@@ -35,7 +38,7 @@ export function Post() {
       }
       
       //send post to backend
-      const res = await fetch('http://localhost:4000/api/user', {
+      const res = await fetch(`${API_BASE}/api/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

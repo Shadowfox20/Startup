@@ -2,12 +2,15 @@ import React from 'react';
 import './view.css';
 
 export function View() {
+  const API_BASE = process.env.NODE_ENV === 'production' 
+  ? 'https://startup.robertthompson.click' 
+  : 'http://localhost:4000';
   const [posts, setPosts] = React.useState([]);
 
   React.useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/posts');
+        const res = await fetch(`${API_BASE}/api/posts`);
         if (res.ok) {
           const data = await res.json();
           console.debug('GET /api/posts response:', data);
