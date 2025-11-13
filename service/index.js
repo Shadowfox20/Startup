@@ -15,11 +15,15 @@ app.use(cookieParser());
 //----------------Connect to Database--------------------//
 
 
+const { MongoClient } = require('mongodb');
+const config = require('../dbConfig.json');
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+
+// Connect to the database clusters
 const client = new MongoClient(url);
 const db = client.db('Game-Shelf');
 const userCollection = db.collection('users');
 const postCollection = db.collection('posts');
-
 
 //----------------Connect to Frontend--------------------//
 
@@ -180,10 +184,11 @@ app.delete('/api/user/me/steam', async (req, res) => {
 });
 
 //Retrieve all posts (no auth required)
-app.get('/api/posts', (req, res) => {
+app.get('/api/posts', async (req, res) => {
   try {
-    //calls compilePosts function
-    const allPosts = postCollection.find({}, { sort: { _id: -1 }, limit: 50 }).toArray();
+    // Return the most recent 50 posts
+    const cursor = postCollection.find({}).sort({ _id: -1 }).limit(50);
+    const allPosts = await cursor.toArray();
     res.send({ posts: allPosts });
   } catch (err) {
     console.error('GET /api/posts error', err);
@@ -214,7 +219,7 @@ async function createUser(username, password) {
   };
 
   //adds user to database
-  userCollection.insertOne(user);
+  await userCollection.insertOne(user);
 
   return user;
 }
@@ -274,19 +279,17 @@ async function addSteamID(token, steamID) {
           console.error('Invalid Steam ID');
           return false;
         }
-
-        //update user profile in database
-        else {
-          //updates user profile with Steam data
-          if (steamData.data.player.avatar) {
-            user.avatar = steamData.data.player.avatar;
-          }
-
-          //adds Steam ID
-          user.steamID = steamID;
-          return true;
+        //updates local data with Steam ID & avatar
+        if (steamData.data.player.avatar) {
+          user.avatar = steamData.data.player.avatar;
         }
-      } 
+        user.steamID = steamID;
+
+        //update database
+        await userCollection.updateOne({ username: user.username }, { $set: { steamID: user.steamID, avatar: user.avatar } });
+
+        return true;
+      }
       
       //failure and error cases
       else {
@@ -328,6 +331,7 @@ async function removeSteamID(token) {
 
 function setAuthCookie(res, user) {
   user.token = uuid.v4();
+  userCollection.updateOne({ username: user.username }, { $set: { token: user.token } });
 
   res.cookie('token', user.token, {
     secure: true,
