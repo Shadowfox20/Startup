@@ -11,6 +11,19 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
+
+//----------------Connect to Database--------------------//
+
+
+const client = new MongoClient(url);
+const db = client.db('Game-Shelf');
+const userCollection = db.collection('users');
+const postCollection = db.collection('posts');
+
+
+//----------------Connect to Frontend--------------------//
+
+
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -22,10 +35,14 @@ app.use((req, res, next) => {
   next();
 });
 
+
+//---------------------API functions---------------------//
+
+
 //Create new user (include username & password in body)
 app.post('/api/auth', async (req, res) => {
   //check if user already exists
-  if (await getUser('username', req.body.username)) {
+  if (await userCollection.findOne({ username: req.body.username })) {
     res.status(409).send({ msg: 'Existing user' });
   } 
   
@@ -41,7 +58,7 @@ app.post('/api/auth', async (req, res) => {
 
 //Sign in existing user (include username & password in body)
 app.put('/api/auth', async (req, res) => {
-  const user = await getUser('username', req.body.username);
+  const user = await userCollection.findOne({ username: req.body.username });
   // validate password
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
     //set session cookie
@@ -59,7 +76,7 @@ app.put('/api/auth', async (req, res) => {
 app.delete('/api/auth', async (req, res) => {
   //retrieve user by token
   const token = req.cookies['token'];
-  const user = await getUser('token', token);
+  const user = await userCollection.findOne({ token: token });
 
   //clear session cookie
   if (user) {
@@ -79,7 +96,7 @@ app.get('/api/user/me', async (req, res) => {
   } else {
     token = req.cookies && req.cookies['token'];
   }
-  const user = await getUser('token', token);
+  const user = await userCollection.findOne({ token: token });
   if (user) {
     res.send({ username: user.username, posts: user.posts, steamID: user.steamID, avatar: user.avatar });
   } else {
@@ -166,7 +183,7 @@ app.delete('/api/user/me/steam', async (req, res) => {
 app.get('/api/posts', (req, res) => {
   try {
     //calls compilePosts function
-    const allPosts = compilePosts();
+    const allPosts = postCollection.find({}, { sort: { _id: -1 }, limit: 50 }).toArray();
     res.send({ posts: allPosts });
   } catch (err) {
     console.error('GET /api/posts error', err);
@@ -179,33 +196,9 @@ app.use((_req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// sets user database, initial user for testing
-const users = [{
-  username: 'The_Robert_Thompson',
-  password: '$2b$10$VZNhODuw.Pq5bkLq5alkteYllNjVD6qjSjJ2MHQ8T/vfYBq9LIURK',
-  posts: [{
-    title: 'Clair Obscur: Expedition 33',
-    score: '10',
-    hours: '70',
-    completion: 'Multiple Playthroughs',
-    tags: 'Role-Playing Game, Turn-based, Linear, Strategy',
-    review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
-  }],
-  steamID: '76561199810391324',
-  avatar: 'https://avatars.steamstatic.com/4c247d2901ddff377da7010b76d4ea374d47c175_full.jpg'
-}];
 
-const posts = [{
-    title: 'Clair Obscur: Expedition 33',
-    score: '10',
-    hours: '70',
-    completion: 'Multiple Playthroughs',
-    tags: 'Role-Playing Game, Turn-based, Linear, Strategy',
-    review: "The game is incredible, easily my Game of the Year. I enjoy turn-based combat, and have played a variety of classic RPGs, and it is clear that the developers did as well. The combat flows so smoothly, and their big change-up in adding a parry mechanic makes it constantly engaging and rewarding. I also love that this mechanic doesn't detract from the strategic elements. For most of the game, every move requires at least some thought. One thing I cannot talk enough about is the story! It's one of those stories that leaves me thinking about it for months after. I played through as much as I could my first time, and I still couldn't get enough, so I played through it a second time just to play the story again. If you're not sure if you want to play it, just try the first hour of the game, and I promise you'll be hooked!",
-    username: 'The_Robert_Thompson', 
-    steamID: '76561199810391324', 
-    avatar: 'https://avatars.steamstatic.com/4c247d2901ddff377da7010b76d4ea374d47c175_full.jpg'
-  }];
+//--------------------Helper Functions--------------------//
+
 
 async function createUser(username, password) {
   //encrypts password
@@ -221,7 +214,7 @@ async function createUser(username, password) {
   };
 
   //adds user to database
-  users.push(user);
+  userCollection.insertOne(user);
 
   return user;
 }
@@ -238,16 +231,20 @@ async function createUser(username, password) {
 async function addPost(token, postContent) {
   try {
     //retrieve user by token
-    const user = await getUser('token', token);
+    const user = await userCollection.findOne({ token: token });
     if (!user) {
       console.warn('addPost: no user for token', token);
       return false;
     }
 
-    //add post to user's posts
+    //add post to user's posts locally
     if (!user.posts) user.posts = [];
     user.posts.push(postContent);
-    posts.unshift({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...postContent });
+    
+    //update database
+    await userCollection.updateOne({ username: user.username }, { $set: { posts: user.posts } });
+    await postCollection.insertOne({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...postContent });
+
     return true;
   } catch (err) {
     console.error('Add post error:', err);
@@ -259,7 +256,7 @@ async function addPost(token, postContent) {
 async function addSteamID(token, steamID) {
   try {
     // retrieve user by token
-    const user = await getUser('token', token);
+    const user = await userCollection.findOne({ token: token });
     if (!user) {
       console.warn('addSteamID: user token not authenticated', token);
       return false;
@@ -309,7 +306,7 @@ async function addSteamID(token, steamID) {
 async function removeSteamID(token) {
   try {
     // retrieve user by token
-    const user = await getUser('token', token);
+    const user = await userCollection.findOne({ token: token });
     if (!user) {
       console.warn('addSteamID: user token not authenticated', token);
       return false;
@@ -328,19 +325,6 @@ async function removeSteamID(token) {
     return false;
   }
 };
-
-function compilePosts() {
-  //returns the posts array
-  return posts;
-}
-
-// retrieves a user from the database by a specified field and value, such as 'username' or 'token'
-function getUser(field, value) {
-  if (value) {
-    return users.find((user) => user[field] === value);
-  }
-  return null;
-}
 
 function setAuthCookie(res, user) {
   user.token = uuid.v4();
