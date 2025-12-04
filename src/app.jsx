@@ -51,13 +51,13 @@ function AppContent() {
                       Post
                     </NavLink>
                   </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/view">
+                      View
+                    </NavLink>
+                  </li>
                 </>
               )}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/view">
-                  View
-                </NavLink>
-              </li>
             </ul>
           </nav>
         </header>

@@ -3,7 +3,7 @@
 //----------------Connect to Database--------------------//
 
 
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const config = require('./dbConfig.json');
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 
@@ -27,7 +27,8 @@ async function createUser(username, password) {
     password: passwordHash,
     posts: [],
     steamID: '',
-    avatar: 'pfp_default.jpg'
+    avatar: 'pfp_default.jpg',
+    likedPosts: [],
   };
 
   //adds user to database
@@ -61,7 +62,7 @@ async function addPost(token, postContent) {
     
     //update database
     await userCollection.updateOne({ username: user.username }, { $set: { posts: user.posts } });
-    await postCollection.insertOne({ username: user.username, steamID: user.steamID, avatar: user.avatar, ...postContent });
+    await postCollection.insertOne({ username: user.username, steamID: user.steamID, avatar: user.avatar, likes: 0, ...postContent });
 
     return true;
   } catch (err) {
@@ -162,8 +163,56 @@ async function viewPosts() {
     return allPosts;
 }
 
-async function likePost(postID) {
-    
+async function getLikedPosts(userToken) {
+    const user = await userCollection.findOne({ token: userToken });
+    return user.likedPosts || [];
+}
+
+async function likePost(userToken, postID) {
+    const oid = new ObjectId(postID);
+    const post = await postCollection.findOne({ "_id": oid });
+    console.log('likePost: fetched post', postID, post);
+    if (!post) {
+        console.warn('likePost: post not found', postID);
+        return 0;
+    }
+    if (post.likes === undefined) {
+        post.likes = 0;
+        await postCollection.updateOne({ "_id": oid }, { $set: { likes: 0 } });
+    }
+    if (userToken) {
+        await postCollection.updateOne({ "_id": oid }, { $inc: { likes: 1 } });
+        console.log('likePost: incremented likes for post', postID, 'to', postCollection.findOne({ "_id": oid }).likes);
+        const user = await userCollection.findOne({ token: userToken });
+        if (!user.likedPosts) {
+            userCollection.updateOne({ token: userToken }, { $set: { likedPosts: [] } });
+        }
+        await userCollection.updateOne({ token: userToken }, { $addToSet: { likedPosts: postID } });
+        return post.likes;
+    }
+    return post.likes + 1;
+}
+
+async function unlikePost(userToken, postID) {
+    const oid = new ObjectId(postID);
+    const post = await postCollection.findOne({ "_id": oid });
+    if (!post) {
+        console.warn('unlikePost: post not found', postID);
+        return 0;
+    }
+    if (userToken) {
+        if (!post.likes || post.likes <= 0) {
+            console.log('unlikePost: post likes already at 0 for post', postID);
+            post.likes = 0;
+            await postCollection.updateOne({ "_id": oid }, { $set: { likes: 0 } });
+            await userCollection.updateOne({ token: userToken }, { $pull: { likedPosts: postID } });
+            return post.likes;
+        }
+        await postCollection.updateOne({ "_id": oid }, { $inc: { likes: -1 } });
+        console.log('unlikePost: decremented likes for post', postID);
+        await userCollection.updateOne({ token: userToken }, { $pull: { likedPosts: postID } });
+    }
+    return post.likes;
 }
 
 module.exports = {
@@ -172,8 +221,10 @@ module.exports = {
   addSteamID,
   removeSteamID,
   likePost,
+  unlikePost,
   findUserByToken,
   findUserByUsername,
   viewPosts,
-  updateUserToken
+  updateUserToken,
+  getLikedPosts,
 };

@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 //Create new user (include username & password in body)
 app.post('/api/auth', async (req, res) => {
   //check if user already exists
-  if (await DB.findUserByUsername(username)) {
+  if (await DB.findUserByUsername(req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
   } 
   
@@ -50,7 +50,7 @@ app.post('/api/auth', async (req, res) => {
 
 //Sign in existing user (include username & password in body)
 app.put('/api/auth', async (req, res) => {
-  const user = await DB.findUserByUsername(username);
+  const user = await DB.findUserByUsername(req.body.username);
   // validate password
   if (user && (await bcrypt.compare(req.body.password, user.password))) {
     //set session cookie
@@ -183,6 +183,23 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
+app.get('/api/user/me/likes', async (req, res) => {
+  const authHeader = req.get('Authorization') || '';
+  //checks header for token, if not found checks cookies
+  let token = null;
+  if (authHeader.startsWith('Bearer ')) {
+    token = authHeader.slice(7);
+  } else {
+    token = req.cookies && req.cookies['token'];
+  }
+  if (token) {
+    const likedPosts = await DB.getLikedPosts(token);
+    res.send({likes: likedPosts});
+  } else {
+    res.send({likes: []});
+  }
+});
+
 //sets routing for frontend
 app.use((_req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
@@ -209,7 +226,7 @@ function clearAuthCookie(res, user) {
 }
 
 const port = 4000;
-const httpService = app.listen(port, function () {
+const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
