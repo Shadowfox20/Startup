@@ -139,7 +139,6 @@ class LikeHandler {
 
   receiveEvent(event) {
     if (event && event.type === 'likeUpdate') {
-      console.log('likes:', event.postId, '->', Number(event.likes));
       const id = String(event.postId);
       this.postLikes.set(id, Number(event.likes) || 0);
       this._emitUpdate(id);
