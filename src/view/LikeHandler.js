@@ -4,8 +4,9 @@ class LikeHandler {
   userToken = '';
   socket = null;
 
-  // queue for messages while socket is CONNECTING
   messageQueue = [];
+
+  listeners = new Set();
 
   constructor() {
     // choose backend websocket endpoint:
@@ -44,6 +45,23 @@ class LikeHandler {
     };
   }
 
+  addListener(fn) {
+    this.listeners.add(fn);
+  }
+
+  removeListener(fn) {
+    this.listeners.delete(fn);
+  }
+
+  _emitUpdate(postId) {
+    const id = String(postId);
+    const likes = Number(this.postLikes.get(id) || 0);
+    const liked = this.likedPosts.has(id);
+    for (const fn of this.listeners) {
+      try { fn({ postId: id, likes, liked }); } catch (e) { console.debug('listener error', e); }
+    }
+  }
+
   // helper to safely send or queue messages
   _sendOrQueue(obj) {
     const msg = JSON.stringify(obj);
@@ -62,7 +80,6 @@ class LikeHandler {
 
   async initToken(newToken) {
     this.userToken = newToken;
-    console.log('Initializing LikeHandler with token:', newToken);
     if (!newToken) {
       this.likedPosts = new Set();
       return;
@@ -93,42 +110,52 @@ class LikeHandler {
       // accept either an array or { likes: [...] }
       let likesArray = Array.isArray(likeData) ? likeData : (Array.isArray(likeData?.likes) ? likeData.likes : []);
       this.likedPosts = new Set(likesArray);
-      console.log('Like data loaded:', likesArray);
     } catch (err) {
       console.error('Error initializing likes:', err);
       this.likedPosts = new Set();
     }
+
+    for (const id of this.postLikes.keys()) this._emitUpdate(id);
+    for (const id of this.likedPosts) this._emitUpdate(id);
   }
 
   addLike(postId) {
-    console.log('Adding like for postId:', postId);
-    if (this.likedPosts.has(postId)) return;
-    this.likedPosts.add(postId);
-    this._sendOrQueue({ type: 'like', postId: postId, user: this.userToken });
+    const id = String(postId);
+    if (this.likedPosts.has(id)) return;
+    this.likedPosts.add(id);
+    this.postLikes.set(id, (this.postLikes.get(id) || 0) + 1);
+    this._emitUpdate(id);
+    this._sendOrQueue({ type: 'like', postId: id, user: this.userToken });
   }
 
   removeLike(postId) {
-    console.log('Removing like for postId:', postId);
-    if (!this.likedPosts.has(postId)) return;
-    this.likedPosts.delete(postId);
-    this._sendOrQueue({ type: 'unlike', postId: postId, user: this.userToken });
-  }
-
-  setLikeCount(postId, count) {
-    if (!postId) return;
-    this.postLikes.set(String(postId), Number(count) || 0);
+    const id = String(postId);
+    if (!this.likedPosts.has(id)) return;
+    this.likedPosts.delete(id);
+    this.postLikes.set(id, Math.max(0, (this.postLikes.get(id) || 1) - 1));
+    this._emitUpdate(id);
+    this._sendOrQueue({ type: 'unlike', postId: id, user: this.userToken });
   }
 
   receiveEvent(event) {
     if (event && event.type === 'likeUpdate') {
-      this.postLikes.set(event.postId, event.likes);
+      console.log('likes:', event.postId, '->', Number(event.likes));
+      const id = String(event.postId);
+      this.postLikes.set(id, Number(event.likes) || 0);
+      this._emitUpdate(id);
     }
   }
 
   isLiked(postId) {
-    console.log('Checking like for postId:', postId);
     return this.likedPosts.has(postId);
   }
+
+  setLikeCount(postId, count) {
+    const id = String(postId);
+    if (!this.postLikes.has(id)) {
+      this.postLikes.set(id, Number(count) || 0);
+    }
+ }
 
   likeCount(postId) {
     return this.postLikes.get(postId) || 0;

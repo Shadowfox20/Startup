@@ -171,7 +171,6 @@ async function getLikedPosts(userToken) {
 async function likePost(userToken, postID) {
     const oid = new ObjectId(postID);
     const post = await postCollection.findOne({ "_id": oid });
-    console.log('likePost: fetched post', postID, post);
     if (!post) {
         console.warn('likePost: post not found', postID);
         return 0;
@@ -182,13 +181,12 @@ async function likePost(userToken, postID) {
     }
     if (userToken) {
         await postCollection.updateOne({ "_id": oid }, { $inc: { likes: 1 } });
-        console.log('likePost: incremented likes for post', postID, 'to', postCollection.findOne({ "_id": oid }).likes);
         const user = await userCollection.findOne({ token: userToken });
         if (!user.likedPosts) {
             userCollection.updateOne({ token: userToken }, { $set: { likedPosts: [] } });
         }
         await userCollection.updateOne({ token: userToken }, { $addToSet: { likedPosts: postID } });
-        return post.likes;
+        return post.likes + 1;
     }
     return post.likes + 1;
 }
@@ -202,17 +200,15 @@ async function unlikePost(userToken, postID) {
     }
     if (userToken) {
         if (!post.likes || post.likes <= 0) {
-            console.log('unlikePost: post likes already at 0 for post', postID);
             post.likes = 0;
             await postCollection.updateOne({ "_id": oid }, { $set: { likes: 0 } });
             await userCollection.updateOne({ token: userToken }, { $pull: { likedPosts: postID } });
-            return post.likes;
+            return 0;
         }
         await postCollection.updateOne({ "_id": oid }, { $inc: { likes: -1 } });
-        console.log('unlikePost: decremented likes for post', postID);
         await userCollection.updateOne({ token: userToken }, { $pull: { likedPosts: postID } });
     }
-    return post.likes;
+    return post.likes - 1;
 }
 
 module.exports = {

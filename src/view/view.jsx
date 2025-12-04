@@ -55,18 +55,36 @@ export function View() {
 
   function PostCard({ post }) {
     const id = String(post._id);
+    // local reactive state
     const [liked, setLiked] = React.useState(() => userLikeHandler.isLiked(id));
     const [likes, setLikes] = React.useState(() => Number(userLikeHandler.likeCount(id) || post.likes || 0));
-    //sets default avatar and formats steam page link
+
+    // ensure LikeHandler has initial count if needed
+    userLikeHandler.setLikeCount(id, post.likes);
+
+    React.useEffect(() => {
+      const onUpdate = ({ postId, likes: newLikes, liked: newLiked }) => {
+        if (String(postId) !== id) return;
+        setLikes(Number(newLikes || 0));
+        setLiked(Boolean(newLiked));
+      };
+      userLikeHandler.addListener(onUpdate);
+
+      // sync once (in case listener missed initial)
+      setLikes(Number(userLikeHandler.likeCount(id) || post.likes || 0));
+      setLiked(userLikeHandler.isLiked(id));
+
+      return () => userLikeHandler.removeListener(onUpdate);
+    }, [id, post.likes]);
+
     const avatar = post.avatar && post.avatar.length ? post.avatar : '/pfp_default.jpg';
     const author = post.steamID ? (
       <a href={`https://steamcommunity.com/profiles/${post.steamID}`} target="_blank" rel="noopener noreferrer">{post.username}</a>
     ) : (
       <span>{post.username}</span>
     );
-    userLikeHandler.setLikeCount(id, post.likes);
 
-    //structure of each post card
+    // structure of each post card
     return (
       <div className="card text-bg-secondary mb-3">
         <div className="card-body">

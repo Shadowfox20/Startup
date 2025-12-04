@@ -10,18 +10,21 @@ function peerProxy(httpServer) {
     console.log('WebSocket client connected');
 
     // Forward messages to everyone except the sender
-    socket.on('message', function updateLike(data) {
+    socket.on('message', async function updateLike(data) {
       try {
-        const like = JSON.parse(data);
+        const like = await JSON.parse(data);
         let likeCount = 0;
         if (like.type === 'like') {
-          likeCount = DB.likePost(like.user, like.postId);
+          likeCount = await DB.likePost(like.user, like.postId);
         } else if (like.type === 'unlike') {
-          likeCount = DB.unlikePost(like.user, like.postId);
+          likeCount = await DB.unlikePost(like.user, like.postId);
         }
+
+        likeCount = Number(likeCount) || 0;
+        const message = JSON.stringify({ type: 'likeUpdate', postId: like.postId, likes: likeCount });
         socketServer.clients.forEach((client) => {
           if (client !== socket && client.readyState === 1) {
-            client.send(JSON.stringify({ type: 'likeUpdate', postId: like.postId, likes: likeCount }));
+            client.send(message);
           }
         });
       } catch (err) {
