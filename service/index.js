@@ -209,7 +209,7 @@ function clearAuthCookie(res, user) {
 }
 
 const port = 4000;
-app.listen(port, function () {
+const httpService = app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
 
