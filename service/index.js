@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 
 //Create new user (include username & password in body)
-app.post('/api/auth', async (req, res) => {
+app.post('/api/create/auth', async (req, res) => {
   //check if user already exists
   if (await DB.findUserByUsername(req.body.username)) {
     res.status(409).send({ msg: 'Existing user' });
@@ -49,7 +49,7 @@ app.post('/api/auth', async (req, res) => {
 
 
 //Sign in existing user (include username & password in body)
-app.put('/api/auth', async (req, res) => {
+app.post('/api/login/auth', async (req, res) => {
   const user = await DB.findUserByUsername(req.body.username);
   // validate password
   if (user && (await bcrypt.compare(req.body.password, user.password))) {

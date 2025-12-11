@@ -13,18 +13,18 @@ export function Login() {
   const { setSignedIn } = useAuth();
 
   function handleLogin() {
-    createAuth('PUT');
+    createAuth('/login');
   }
 
   function handleRegister() {
-    createAuth('POST');
+    createAuth('/create');
   }
 
-  async function createAuth(method) {
+  async function createAuth(path) {
     try {
       //send data to backend
-      const res = await fetch(`${API_BASE}/api/auth`, {
-        method: method,
+      const res = await fetch(`${API_BASE}/api${path}/auth`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
