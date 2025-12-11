@@ -1,4 +1,4 @@
-
+const bcrypt = require('bcryptjs');
 
 //----------------Connect to Database--------------------//
 
