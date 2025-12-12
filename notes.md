@@ -135,6 +135,14 @@ root.render(<App />);
 - import the CSS file
 - create a function `Page-name()` which returns the content of the page
 
+### Important functions:
+- `React.useState()` returns a special react object type that can dynamically update
+- Hooks:
+    - Ref hooks aren't used for rendering
+        - `React.useRef` declares a ref
+    - Effect hooks connect to external systems, such as WebSocket or backend
+        - `React.useEffect (() => {/insert code})` uses the code
+
 ## Node.js:
 - Create endpoints in `service/index.js` to allow front end to connect back end
 - Format endpoints:
@@ -177,9 +185,88 @@ const collection = db.collection('<collection name>');
 ### Retrieving data:
 - `collection.findOne({ attr: val })` finds the first object in the collection with the specified attribute (e.g. username or token)
 - `collection.find({ attr: val })` finds all objects in the collection with the specified attributes
+    - you can replace `val` with `{ $lt : val }` (less than) or `{ $gt : val }` (greater than)
     - optionally you can sort with `.sort({ attr: direction })`, with `1` indicating ascending and `-1` indicating descending
     - format the data as an array with `.toArray()`
 
 ### Sending data:
 - `collection.insertOne({ })` adds a new object to the collection
 - `userCollection.updateOne({ <find values> }, { $set: { attr: value } })`
+
+## WebSocket
+### What is it?
+- live peer-to-peer connections
+
+### Backend:
+Initialize with `const socketServer = new WebSocketServer({ server: httpServer });`
+
+```
+socket.on(connection, (socket) => {
+    socket.isAlive = true;
+    socket.on('message', async function myFunction(data) {
+        /insert code to format a "message"
+        socketServer.clients.forEach((client) => {
+          if (client !== socket && client.readyState === 1) {
+            client.send(message);
+          }5
+        });
+    });
+    
+```
+
+### Frontend:
+```
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const wsHost = isLocalhost ? `${window.location.hostname}:4000` : window.location.hostname;
+const wsUrl = `${proto}://${wsHost}/ws`;
+this.socket = new WebSocket(wsUrl);
+this.socket.onopen = () => {
+  while (this.messageQueue.length) { this.socket.send(this.messageQueue.shift()); }
+};
+this.socket.onmessage = async (msg) => {
+    //insert code to handle recieving a message
+}
+```
+to send a message:
+```
+const msg = JSON.stringify(obj);
+this.socket.send(msg);
+```
+
+## Final Exam Review
+Status Code:
+- 200: Success
+- 3XX: Redirects (not usually an error)
+- 4XX: Client Error (not found, auth error)
+- 5XX: Server Error
+
+HTTP headers:
+- `content-type` explains what format the content is in (e.g. `application/json` or `image`);  helps to identify errors
+
+Cookie types:
+- Secure cookie: sent over https
+- Http-only cookie: can't be modified
+- Same-site cookie: can't be used on another site
+- None are default, but one cookie can have all
+
+HTTP requests:
+- POST (add): create a resource, send a body
+- GET: access a resource
+- DELETE: delete a resource
+- PUT (edit): update a resource
+
+Security:
+- Passwords: salt (slight edit, unique to user) and hash (scramble)
+
+Acronyms:
+- JSX: JavaScript XML (react
+- JS: JavaScript
+- AWS: Amazon Web Services
+- NPM: Node Package Manager
+- NVM: Node Version Manager
+
+Important systems:
+- node.js is for backend javascript
+- pm2 is a Daemon that runs our JS
+- Vite builds the JS into something that the computer can run; builds typescript into JS
